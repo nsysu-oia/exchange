@@ -1,18 +1,64 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div
+    class="wrapper"
+    :style="{ 'grid-template-columns': (mobileDevice) ? 'none' : '1fr 1fr 1fr 1fr 1fr'}"
+  >
+    <Stage
+      class="stage"
+      v-for="stage in stages"
+      :key="stage.id"
+      :stage="stage"
+      :divHeight="divHeight"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Stage from '@/components/Stage.vue'
+import stages from '@/assets/data/stages.js'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    Stage
+  },
+  data () {
+    return {
+      stages: stages,
+      divHeight: {
+        id: 100,
+        note: 110,
+        apply: 130,
+        upload: 130,
+        download: 140
+      }
+    }
+  },
+  computed: {
+    mobileDevice () {
+      switch (this.$store.state.windowSize) {
+        case 'xs':
+        case 'sm':
+        case 'md':
+          return true
+        default:
+          return false
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+.space {
+  height: 20px;
+}
+.wrapper {
+  display: grid;
+}
+.stage {
+  margin: 5px;
+  border-radius: 10px;
+}
+</style>
