@@ -1,7 +1,4 @@
 <template>
-  <div class="login">
-    <h1>Login</h1>
-  </div>
   <form @submit.prevent="login">
     <label for="studentID">
       學號：
@@ -11,42 +8,34 @@
     <label for="password">
       密碼：
     </label>
-    <input @input="hashing($event.target.value)" type="password" name="password">
+    <input v-model="password" type="password" name="password">
 
     <button type="submit" name="button">
       登入
     </button>
-
-    <div>
-      {{ studentID }}
-      {{ passwordHashed }}
-    </div>
   </form>
+  <p v-if="status === 400">Incorrect student ID or password.</p>
 </template>
 
 <script>
-import md5 from 'md5'
 export default {
   name: 'Login',
   data () {
     return {
       studentID: '',
-      passwordHashed: ''
+      password: '',
+      status: null
     }
   },
   methods: {
-    hashing (data) {
-      this.passwordHashed = md5(data)
-    },
     login () {
       this.$store
         .dispatch('login', {
           studentID: this.studentID,
-          passwordHashed: this.passwordHashed
+          password: this.password
         })
-        .then(() => {
-          this.$router.push({ name: 'Home' })
-        })
+        .then(() => { this.$router.push({ name: 'Home' }) })
+        .catch(err => { this.status = err.response.status })
     }
   }
 }

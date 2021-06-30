@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import axios from 'axios'
 
 const breakpointsMax = {
   xs: 600,
@@ -31,10 +32,27 @@ export default createStore({
     UPDATE_WINDOW_WIDTH (state) {
       state.windowWidth = window.innerWidth
       state.windowSize = getWindowSize(window.innerWidth)
+    },
+    SET_USER (state, data) {
+      state.user = data
+      localStorage.setItem('user', JSON.stringify(data))
+      axios.defaults.headers.common.Authorization = `Bearer ${data.token}`
+    },
+    CLR_USER () {
+      localStorage.removeItem('user')
+      location.reload()
     }
   },
   actions: {
     login ({ commit }, credentials) {
+      return axios
+        .post('//localhost:3000/login', credentials)
+        .then(({ data }) => {
+          commit('SET_USER', data)
+        })
+    },
+    logout ({ commit }) {
+      commit('CLR_USER')
     }
   },
   modules: {

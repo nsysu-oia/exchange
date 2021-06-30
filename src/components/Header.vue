@@ -6,6 +6,8 @@
   <div id="nav">
     <!-- <router-link :to="{ name: 'Root' }">Root</router-link> --> |
     <router-link :to="{ name: 'Home' }">Home</router-link> |
+    <router-link v-if="!user" :to="{ name: 'Login' }">Login</router-link> |
+    <button v-if="user" type="button" @click="logout">Logout</button>
     <!-- <router-link :to="{ name: 'About' }">About</router-link> -->
   </div>
 </template>
@@ -14,6 +16,9 @@
 export default {
   name: 'Header',
   computed: {
+    user () {
+      return this.$store.state.user
+    },
     logo () {
       // For webpack compile
       switch (this.$store.state.windowSize) {
@@ -39,6 +44,11 @@ export default {
         default:
           return '35pt'
       }
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('logout')
     }
   }
 }
