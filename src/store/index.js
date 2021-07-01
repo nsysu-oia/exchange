@@ -46,7 +46,7 @@ export default createStore({
   actions: {
     login ({ commit }, credentials) {
       return axios
-        .post('//localhost:3000/login', credentials)
+        .post('//' + process.env.VUE_APP_BACK_END_HOST + ':3000/login', credentials)
         .then(({ data }) => {
           commit('SET_USER', data)
         })
