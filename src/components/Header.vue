@@ -1,14 +1,12 @@
 <template>
-  <div class="wrapper">
-    <img :src="logo" alt="OIA logo" class="logo">
-  </div>
-  <div class="title" :style="{ 'font-size': titleFontSize }">國立中山大學交換計畫單一入口</div>
-  <div id="nav">
-    <!-- <router-link :to="{ name: 'Root' }">Root</router-link> --> |
+  <div class="container">
+    <img :src="logo" alt="OIA logo"  :style="{ 'width': logoWidth }">
+    <button v-if="user" type="button" class="button" @click="logout">Logout</button>
+    <!-- <router-link :to="{ name: 'Root' }">Root</router-link> |
     <router-link :to="{ name: 'Home' }">Home</router-link> |
     <router-link v-if="!user" :to="{ name: 'Login' }">Login</router-link> |
     <button v-if="user" type="button" @click="logout">Logout</button>
-    <!-- <router-link :to="{ name: 'About' }">About</router-link> -->
+    <router-link :to="{ name: 'About' }">About</router-link> -->
   </div>
 </template>
 
@@ -20,7 +18,6 @@ export default {
       return this.$store.state.user
     },
     logo () {
-      // For webpack compile
       switch (this.$store.state.windowSize) {
         case 'xs':
         case 'sm':
@@ -29,20 +26,14 @@ export default {
           return require('@/assets/logos/logo-desktop.png')
       }
     },
-    titleFontSize () {
+    logoWidth () {
       switch (this.$store.state.windowSize) {
-        case 'xs':
-          return '20pt'
-        case 'sm':
-          return '25pt'
-        case 'md':
-          return '30pt'
         case 'lg':
-          return '35pt'
+          return '40%'
         case 'xl':
-          return '40pt'
+          return '30%'
         default:
-          return '35pt'
+          return '50%'
       }
     }
   },
@@ -55,25 +46,21 @@ export default {
 </script>
 
 <style scoped>
-#nav {
-  padding: 10px;
+.button {
+  background-color: #1C4A7C; /* Green */
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #045e91;
-}
-.logo {
-  width: 30%;
-}
-.title {
-  font-weight: bold;
-}
-.wrapper {
-  display: grid;
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.5rem 1rem 0.5rem;
 }
 </style>

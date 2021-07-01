@@ -1,4 +1,5 @@
 <template>
+  <div :style="{ 'font-size': titleFontSize }">國立中山大學交換計畫單一入口</div>
   <form @submit.prevent="login">
     <label for="studentID">
       學號：
@@ -25,6 +26,24 @@ export default {
       studentID: '',
       password: '',
       status: null
+    }
+  },
+  computed: {
+    titleFontSize () {
+      switch (this.$store.state.windowSize) {
+        case 'xs':
+          return '20pt'
+        case 'sm':
+          return '25pt'
+        case 'md':
+          return '30pt'
+        case 'lg':
+          return '35pt'
+        case 'xl':
+          return '40pt'
+        default:
+          return '35pt'
+      }
     }
   },
   methods: {
