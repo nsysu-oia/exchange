@@ -1,15 +1,23 @@
 <template>
-  <Header/>
+  <Header v-if="isLoginPage"/>
   <router-view/>
 </template>
 
 <script>
 import axios from 'axios'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import Header from '@/components/Header.vue'
 export default {
   name: 'App',
   components: {
     Header
+  },
+  setup () {
+    const isLoginPage = computed(() => { // no header for login page
+      return useRoute().name !== 'Login'
+    })
+    return { isLoginPage }
   },
   created () {
     // RWD
@@ -27,7 +35,7 @@ export default {
       response => response,
       error => {
         if (error.response.status === 401) {
-          this.$router.push('/')
+          this.$router.push({ name: 'Login' })
           this.$store.dispatch('logout')
         }
         return Promise.reject(error)
@@ -40,8 +48,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+}
 #app {
+  height: 100%;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

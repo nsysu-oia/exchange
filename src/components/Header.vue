@@ -51,7 +51,6 @@ export default {
   border: none;
   border-radius: 8px;
   color: white;
-  padding: 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
