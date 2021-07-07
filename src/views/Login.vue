@@ -1,18 +1,22 @@
 <template>
   <div class="bg">
     <div class="login-box">
-      <img src="@/assets/logos/logo-mobile.png" alt="OIA logo" style="width: 250px">
-      <div>國立中山大學交換計畫單一入口</div>
+      <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
+      <div class="title" >國立中山大學交換計畫單一入口</div>
       <form @submit.prevent="login">
-        <label for="studentID">
-          學號：
-        </label>
-        <input v-model="studentID" type="text" name="studentID">
+        <div class="studentID-box">
+          <label for="studentID">
+            學號：
+          </label>
+          <input v-model="studentID" type="text" name="studentID">
+        </div>
 
-        <label for="password">
-          密碼：
-        </label>
-        <input v-model="password" type="password" name="password">
+        <div class="password-box">
+          <label for="password">
+            密碼：
+          </label>
+          <input v-model="password" type="password" name="password">
+        </div>
 
         <button type="submit" name="button">
           登入
@@ -70,5 +74,17 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 15rem;
+}
+.logo {
+  width: 250px;
+  margin: 1rem;
+}
+.title {
+  font-size: 1.5rem;
+  margin: 1rem;
+}
+.studentID-box, .password-box {
+  margin: 1rem;
 }
 </style>
