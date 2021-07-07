@@ -47,7 +47,7 @@ export default createStore({
   actions: {
     login ({ commit }, credentials) {
       return axios
-        .post('//' + backendHost + ':3000/login', credentials)
+        .post('//' + backendHost + ':3000/sso-auth', credentials)
         .then(({ data }) => {
           commit('SET_USER', data)
         })

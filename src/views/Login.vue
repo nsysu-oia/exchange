@@ -1,7 +1,7 @@
 <template>
   <div class="bg">
-    <div>
-      <img src="@/assets/logos/logo-mobile.png" alt="OIA logo" style="width: 200px">
+    <div class="login-box">
+      <img src="@/assets/logos/logo-mobile.png" alt="OIA logo" style="width: 250px">
       <div>國立中山大學交換計畫單一入口</div>
       <form @submit.prevent="login">
         <label for="studentID">
@@ -65,5 +65,10 @@ export default {
   align-items: center;
   display: flex;
   justify-content: center;
+}
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
