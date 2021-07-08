@@ -77,8 +77,8 @@ export default {
     noteIcon () { return require('@/assets/icons/note.svg') },
     checkBoxIcon () { return require('@/assets/icons/check-box.svg') },
     checkBoxDoneIcon () { return require('@/assets/icons/check-box-done.svg') },
-    downloadIcon () { return require('@/assets/icons/download.svg') },
-    uploadIcon () { return require('@/assets/icons/upload.svg') }
+    uploadIcon () { return require('@/assets/icons/upload.svg') },
+    downloadIcon () { return require('@/assets/icons/download.svg') }
   },
   methods: {
     iconPath (section, done = false) {
@@ -89,9 +89,9 @@ export default {
           if (done) return "'" + this.checkBoxDoneIcon + "'"
           return "'" + this.checkBoxIcon + "'"
         case 2:
-          return "'" + this.downloadIcon + "'"
-        case 3:
           return "'" + this.uploadIcon + "'"
+        case 3:
+          return "'" + this.downloadIcon + "'"
         default:
       }
     }
