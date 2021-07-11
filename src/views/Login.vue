@@ -4,79 +4,104 @@
       <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
       <div class="title">出國交換計畫平台</div>
       <form @submit.prevent="sidAuth">
-        <input v-model="studentID" ref="studentID" type="text" placeholder="學號" autofocus />
-        <button v-if="pwVis === 'hidden'" :disabled="!studentID" type="submit" name="button" />
+        <input
+          v-model="studentID"
+          @input="sidChanged"
+          @focus="sidFocused"
+          @blur="sidBlurred"
+          ref="studentID"
+          type="text"
+          placeholder="學號"
+          autofocus
+        />
+        <button v-if="!sidVerified" :disabled="!studentID" type="submit" name="button" />
       </form>
-      <form @submit.prevent="ssoAuth" :style="'visibility:' + pwVis">
-        <input v-model="password" ref="password" type="password" placeholder="密碼" class="pw-input" />
-        <button :disabled="!password" type="submit" name="button" />
-      </form>
-      <p>&nbsp;{{ errMsg }}&nbsp;</p>
+      <transition @before-enter="AAAAA" @enter="BBBBB" :css="false">
+        <form @submit.prevent="ssoAuth" v-if="sidVerified">
+          <input
+            v-model="password"
+            @input="errMsg = ''"
+            @focus="pwFocused"
+            @blur="pwBlurred"
+            ref="password"
+            type="password"
+            placeholder="密碼"
+            class="pw-input"
+          />
+          <button :disabled="!password" type="submit" name="button" />
+        </form>
+      </transition>
+      <p v-if="!!errMsg">{{ errMsg }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import gsap from 'gsap'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
+const gray = '#d6d6d6'
+const blue = '#0070c9'
+
 export default {
   name: 'Login',
   data () {
     return {
       studentID: '',
       password: '',
-      pwVis: 'hidden',
-      errMsg: ' '
+      sidVerified: false,
+      errMsg: ''
     }
   },
-  mounted: function () {
-    const gray = '#d6d6d6'
-    const blue = '#0070c9'
-
-    this.$refs.studentID.addEventListener('focus', el => {
-      if (this.pwVis === 'visible') {
-        el.target.style['border-bottom'] = '1px solid ' + blue
+  methods: {
+    sidFocused () {
+      if (this.sidVerified) {
+        this.$refs.studentID.style['border-bottom'] = '1px solid ' + blue
         this.$refs.password.style['border-top'] = 0
       }
-    })
-    this.$refs.studentID.addEventListener('blur', el => {
-      if (this.pwVis === 'visible') {
-        el.target.style['border-bottom'] = 0
+    },
+    sidBlurred () {
+      if (this.sidVerified) {
+        this.$refs.studentID.style['border-bottom'] = 0
         this.$refs.password.style['border-top'] = '1px solid ' + gray
       }
-    })
-    this.$refs.password.addEventListener('focus', el => {
-      if (this.pwVis === 'visible') {
-        el.target.style['border-top-color'] = blue
+    },
+    pwFocused () {
+      if (this.sidVerified) {
+        this.$refs.password.style['border-top-color'] = blue
       }
-    })
-    this.$refs.password.addEventListener('blur', el => {
-      if (this.pwVis === 'visible') {
-        el.target.style['border-top-color'] = gray
+    },
+    pwBlurred () {
+      if (this.sidVerified) {
+        this.$refs.password.style['border-top-color'] = gray
       }
-    })
-  },
-  watch: {
-    studentID: function () {
-      this.errMsg = ' '
-      this.pwVis = 'hidden'
+    },
+    sidChanged () {
+      this.errMsg = ''
+      this.sidVerified = false
       this.password = ''
 
       this.$refs.studentID.style.removeProperty('border-bottom')
       this.$refs.studentID.style.removeProperty('border-bottom-left-radius')
       this.$refs.studentID.style.removeProperty('border-bottom-right-radius')
     },
-    password: function () {
-      this.errMsg = ' '
-    }
-  },
-  methods: {
+    AAAAA (el) {
+      el.style.opacity = 0
+      el.style.transform = 'scale(0,0)'
+    },
+    BBBBB (el) {
+      gsap.to(el, {
+        duration: 1,
+        opacity: 1,
+        scale: 1
+      })
+    },
     sidAuth () {
       axios
         .post('//' + backendHost + ':3000/sid-auth', { studentID: this.studentID })
         .then(() => {
           this.errMsg = ' '
-          this.pwVis = 'visible'
+          this.sidVerified = true
           this.$refs.studentID.style.cssText = `
             border-bottom: 0;
             border-bottom-left-radius: 0;
@@ -87,7 +112,7 @@ export default {
         .catch(err => {
           if (err.response.status === 400) {
             this.errMsg = '您並未申請學生交換計畫'
-            this.pwVis = 'hidden'
+            this.sidVerified = false
           }
         })
     },
@@ -129,7 +154,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 12rem;
+  height: 400px;
 }
 .logo {
   width: 250px;
@@ -145,7 +170,7 @@ form {
 input {
   position: relative;
   font-size: 17px;
-  width: 300px;
+  width: 270px;
   height: 42px;
   padding: 0 43px 0 15px;
   background: #fff;
