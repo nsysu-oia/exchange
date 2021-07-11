@@ -3,7 +3,7 @@
     <div class="login-box">
       <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
       <div class="title">出國交換計畫平台</div>
-      <form @submit.prevent="sidAuth">
+      <div class="form">
         <input
           v-model="studentID"
           @input="sidChanged"
@@ -13,11 +13,12 @@
           type="text"
           placeholder="學號"
           autofocus
+          @keyup.enter="sidAuth"
         />
-        <button v-if="!sidVerified" :disabled="!studentID" type="submit" name="button" />
-      </form>
-      <transition @before-enter="AAAAA" @enter="BBBBB" :css="false">
-        <form @submit.prevent="ssoAuth" v-if="sidVerified">
+        <button v-if="!sidVerified" :disabled="!studentID" @click="sidAuth" />
+      </div>
+      <transition @before-enter="collapse" @leave="collapseRev" :css="false">
+        <div class="form" v-if="sidVerified">
           <input
             v-model="password"
             @input="errMsg = ''"
@@ -27,9 +28,10 @@
             type="password"
             placeholder="密碼"
             class="pw-input"
+            @keyup.enter="ssoAuth"
           />
-          <button :disabled="!password" type="submit" name="button" />
-        </form>
+          <button :disabled="!password" @click="ssoAuth" />
+        </div>
       </transition>
       <p v-if="!!errMsg">{{ errMsg }}</p>
     </div>
@@ -85,15 +87,24 @@ export default {
       this.$refs.studentID.style.removeProperty('border-bottom-left-radius')
       this.$refs.studentID.style.removeProperty('border-bottom-right-radius')
     },
-    AAAAA (el) {
-      el.style.opacity = 0
-      el.style.transform = 'scale(0,0)'
+    collapse (el) {
+      gsap.fromTo(el, {
+        height: 0,
+        opacity: 0
+      }, {
+        height: '42px',
+        opacity: 1
+      })
     },
-    BBBBB (el) {
-      gsap.to(el, {
-        duration: 1,
-        opacity: 1,
-        scale: 1
+    collapseRev (el, done) {
+      console.log('in')
+      gsap.fromTo(el, {
+        height: '42px',
+        opacity: 1
+      }, {
+        height: 0,
+        opacity: 0,
+        onComplete: done
       })
     },
     sidAuth () {
@@ -164,18 +175,20 @@ export default {
   font-size: 21px;
   margin-bottom: 13px;
 }
-form {
+.form {
   position: relative;
+  height: 42px;
 }
 input {
   position: relative;
   font-size: 17px;
   width: 270px;
-  height: 42px;
+  height: 100%;
   padding: 0 43px 0 15px;
   background: #fff;
   border: 1px solid #d6d6d6;
   border-radius: 6px;
+  vertical-align: top;
 }
 .pw-input {
   border-top-left-radius: 0;
