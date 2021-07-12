@@ -11,6 +11,7 @@
           @blur="sidBlurred"
           ref="studentID"
           type="text"
+          autocomplete="username"
           placeholder="學號"
           autofocus
           @keyup.enter="sidAuth"
@@ -26,6 +27,7 @@
             @blur="pwBlurred"
             ref="password"
             type="password"
+            autocomplete="current-password"
             placeholder="密碼"
             class="pw-input"
             @keyup.enter="ssoAuth"
