@@ -3,7 +3,7 @@ const stages = [
     id: '校內甄選階段',
     style: {
       color: '#f2f2f2',
-      'background-color': '#464d77'
+      backgroundColor: '#464d77'
     },
     notes: [],
     applies: [
@@ -24,7 +24,7 @@ const stages = [
   {
     id: '校外提名申請階段',
     style: {
-      'background-color': '#98c1d9'
+      backgroundColor: '#98c1d9'
     },
     notes: [
       {
@@ -57,7 +57,7 @@ const stages = [
   {
     id: '出國前一個月',
     style: {
-      'background-color': '#aaabd3'
+      backgroundColor: '#aaabd3'
     },
     notes: [
       {
@@ -116,7 +116,7 @@ const stages = [
   {
     id: '出國期間',
     style: {
-      'background-color': '#eebfcd'
+      backgroundColor: '#eebfcd'
     },
     notes: [
       {
@@ -156,7 +156,7 @@ const stages = [
   {
     id: '返國後兩個月',
     style: {
-      'background-color': '#ecb8a5'
+      backgroundColor: '#ecb8a5'
     },
     notes: [
       {

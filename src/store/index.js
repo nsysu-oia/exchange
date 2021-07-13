@@ -27,7 +27,13 @@ export default createStore({
   state: {
     windowWidth: window.innerWidth,
     windowSize: getWindowSize(window.innerWidth),
-    user: null
+    user: null,
+    sectionHeights: {
+      note: 0,
+      apply: 0,
+      upload: 0,
+      download: 0
+    }
   },
   mutations: {
     UPDATE_WINDOW_WIDTH (state) {
@@ -42,6 +48,9 @@ export default createStore({
     CLR_USER () {
       localStorage.removeItem('user')
       location.reload()
+    },
+    UPDATE_SECTION_HEIGHTS (state, heights) {
+
     }
   },
   actions: {

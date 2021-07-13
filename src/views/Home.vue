@@ -4,7 +4,6 @@
     :style="{ 'grid-template-columns': (mobileDevice) ? 'none' : '1fr 1fr 1fr 1fr 1fr'}"
   >
     <Stage
-      class="stage"
       v-for="stage in stages"
       :key="stage.id"
       :stage="stage"
@@ -27,7 +26,6 @@ export default {
     return {
       stages: stages,
       divHeight: {
-        id: 100,
         note: 110,
         apply: 130,
         upload: 130,
@@ -56,9 +54,5 @@ export default {
 }
 .wrapper {
   display: grid;
-}
-.stage {
-  margin: 5px;
-  border-radius: 10px;
 }
 </style>

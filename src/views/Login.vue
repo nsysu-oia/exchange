@@ -11,7 +11,7 @@
           @blur="sidBlurred"
           ref="studentID"
           type="text"
-          autocomplete="username"
+          autocomplete="off"
           placeholder="學號"
           autofocus
           @keyup.enter="sidAuth"
@@ -19,7 +19,7 @@
         <button v-if="!sidVerified" :disabled="!studentID" @click="sidAuth" />
       </div>
       <transition @before-enter="collapse" @leave="collapseRev" :css="false">
-        <div class="form" v-if="sidVerified">
+        <div class="form" v-show="sidVerified">
           <input
             v-model="password"
             @input="errMsg = ''"
@@ -27,7 +27,7 @@
             @blur="pwBlurred"
             ref="password"
             type="password"
-            autocomplete="current-password"
+            autocomplete="off"
             placeholder="密碼"
             class="pw-input"
             @keyup.enter="ssoAuth"
@@ -99,7 +99,6 @@ export default {
       })
     },
     collapseRev (el, done) {
-      console.log('in')
       gsap.fromTo(el, {
         height: '42px',
         opacity: 1
