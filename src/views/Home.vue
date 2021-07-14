@@ -1,13 +1,12 @@
 <template>
   <div
-    class="wrapper"
-    :style="{ 'grid-template-columns': (mobileDevice) ? 'none' : '1fr 1fr 1fr 1fr 1fr'}"
+    class="grid-wrapper"
+    :style="(mobileDevice) ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
   >
     <Stage
       v-for="stage in stages"
       :key="stage.id"
       :stage="stage"
-      :divHeight="divHeight"
     />
   </div>
 </template>
@@ -24,13 +23,7 @@ export default {
   },
   data () {
     return {
-      stages: stages,
-      divHeight: {
-        note: 110,
-        apply: 130,
-        upload: 130,
-        download: 140
-      }
+      stages: stages
     }
   },
   computed: {
@@ -49,10 +42,9 @@ export default {
 </script>
 
 <style scoped>
-.space {
-  height: 20px;
-}
-.wrapper {
+.grid-wrapper {
   display: grid;
+  grid-column-gap: 1em;
+  padding: 0 1em 1em 1em;
 }
 </style>

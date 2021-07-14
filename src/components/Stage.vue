@@ -1,49 +1,55 @@
 <template>
-  <div class="wrapper" :style="{ '--border-color': stage.style.backgroundColor }">
+  <div :style="sectionStyle(1, stage.style)">
     <router-link
       :to="{name: 'StageDetails', params: { id: stage.id } }"
       class="stage-title-link"
     >
       <div class="stage-title" :style="stage.style" >{{ stage.id }}</div>
     </router-link>
+  </div>
 
-    <ul v-if="stage.notes.length" class="note" :style="{ height: noteH }">
+  <div :style="sectionStyle(2, stage.style)">
+    <ul v-if="stage.notes.length" class="note">
       <li
         v-for="note in stage.notes"
         :key="note.id"
       >{{ note.title }}</li>
     </ul>
-    <ul v-else :style="{ height: noteH }"></ul>
+  </div>
 
-    <div v-if="!mobileDevice || !!stage.applies.length">申請或登錄</div>
-    <ul v-if="stage.applies.length" :style="{ height: applyH }">
+  <div :style="sectionStyle(3, stage.style)">
+    <div v-if="!mobileDevice || !!stage.applies.length" class="section-title" :style="stage.style">申請或登錄</div>
+    <ul v-if="stage.applies.length">
       <li
         v-for="apply in stage.applies"
         :key="apply.id"
         :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
       >{{ apply.title }}</li>
     </ul>
-    <ul v-else :style="{ height: applyH }"></ul>
+  </div>
 
-    <div v-if="!mobileDevice || !!stage.uploads.length">上傳檔案區</div>
-    <ul v-if="stage.uploads.length" :style="{ height: uploadH }">
+  <div :style="sectionStyle(4, stage.style)">
+    <div v-if="!mobileDevice || !!stage.uploads.length" class="section-title" :style="stage.style">上傳檔案區</div>
+    <ul v-if="stage.uploads.length">
       <li
         v-for="upload in stage.uploads"
         :key="upload.id"
         :style="{ listStyle: 'url(' + icons[2] + ')' }"
       >{{ upload.title }}</li>
     </ul>
-    <ul v-else :style="{ height: uploadH }"></ul>
+  </div>
 
-    <div v-if="!mobileDevice || !!stage.downloads.length">下載檔案區</div>
-    <ul v-if="stage.downloads.length" :style="{ height: downloadH }">
+  <div :style="sectionStyle(5, stage.style)">
+    <div v-if="!mobileDevice || !!stage.downloads.length" class="section-title" :style="stage.style">下載檔案區</div>
+    <ul>
+      <!-- we will need this ul on the mobile devices even if no downloads
+           to present the bottom border-radius --->
       <li
         v-for="download in stage.downloads"
         :key="download.id"
         :style="{ listStyle: 'url(' + icons[3] + ')' }"
       >{{ download.title }}</li>
     </ul>
-    <ul v-else :style="{ height: downloadH }"></ul>
   </div>
 </template>
 
@@ -52,10 +58,6 @@ export default {
   name: 'Stage',
   props: {
     stage: {
-      type: Object,
-      required: true
-    },
-    divHeight: {
       type: Object,
       required: true
     }
@@ -80,23 +82,34 @@ export default {
         default:
           return false
       }
-    },
-    // For caching
-    noteH () { return this.mobileDevice ? 'initial' : this.divHeight.note + 'px' },
-    applyH () { return this.mobileDevice ? 'initial' : this.divHeight.apply + 'px' },
-    uploadH () { return this.mobileDevice ? 'initial' : this.divHeight.upload + 'px' },
-    downloadH () { return this.mobileDevice ? 'initial' : this.divHeight.download + 'px' }
+    }
+  },
+  methods: {
+    sectionStyle (index, stageStyle) {
+      // styles tailored for each section
+      var style = {}
+      if (index === 1) {
+        style.marginTop = '1em'
+        style.borderRadius = '10px 10px 0 0'
+        style.overflow = 'hidden'
+      } else {
+        style.borderLeft = '3px solid ' + stageStyle.backgroundColor
+        style.borderRight = '3px solid ' + stageStyle.backgroundColor
+      }
+      if (index === 5) {
+        style.borderRadius = '0 0 10px 10px'
+        style.borderBottom = '3px solid ' + stageStyle.backgroundColor
+      }
+      if (!this.mobileDevice) {
+        style.gridRow = index
+      }
+      return style
+    }
   }
 }
 </script>
 
 <style scoped>
-.wrapper {
-  margin: 5px;
-  border-radius: 10px;
-  border: 3px solid var(--border-color);
-  overflow: hidden;
-}
 li {
   text-align: left;
   padding: 5px;
@@ -107,24 +120,25 @@ li {
 li:hover {
   background-color: #d6d6d6;
 }
-.stage:hover {
-  transform: scale(1.01);
-  box-shadow: 0 3px 12px 0 rgba(0, 0, 0, 0.2);
-}
 .stage-title {
   font-size: 20pt;
   padding: 20px 5px;
+  white-space: nowrap;
 }
 .stage-title-link {
   color: #2c3e50;
   text-decoration: none;
+}
+.section-title {
+  border-radius: 20px;
+  padding: 5px;
+  margin: 10px 25%;
 }
 ul.note {
   font-size: 13px;
   color: #666666;
   list-style: none;
   padding: 5px;
-  margin: 0;
 }
 ul.note li:hover {
   background-color: revert;
