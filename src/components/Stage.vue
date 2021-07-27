@@ -42,8 +42,8 @@
   <div :style="sectionStyle(5, stage.style)">
     <div v-if="!mobileDevice || !!stage.downloads.length" class="section-title" :style="stage.style">下載檔案區</div>
     <ul>
-      <!-- we will need this ul on the mobile devices even if no downloads
-           to present the bottom border-radius --->
+      <!-- we will need this ul on the mobile devices even if no downloads.
+           So we can present the bottom border-radius --->
       <li
         v-for="download in stage.downloads"
         :key="download.id"
@@ -124,6 +124,10 @@ li:hover {
   font-size: 20pt;
   padding: 20px 5px;
   white-space: nowrap;
+  transition: transform .2s;
+}
+.stage-title:hover {
+  transform: scale(1.05, 1.05);
 }
 .stage-title-link {
   color: #2c3e50;

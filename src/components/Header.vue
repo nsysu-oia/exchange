@@ -1,12 +1,7 @@
 <template>
   <div class="container">
-    <img :src="logo" alt="OIA logo"  :style="{ 'width': logoWidth }">
+    <img :src="logo" alt="OIA logo" class="logo" :style="{ 'width': logoWidth }" @click="pushHome">
     <button v-if="user" type="button" class="button" @click="logout">Logout</button>
-    <!-- <router-link :to="{ name: 'Root' }">Root</router-link> |
-    <router-link :to="{ name: 'Home' }">Home</router-link> |
-    <router-link v-if="!user" :to="{ name: 'Login' }">Login</router-link> |
-    <button v-if="user" type="button" @click="logout">Logout</button>
-    <router-link :to="{ name: 'About' }">About</router-link> -->
   </div>
 </template>
 
@@ -38,6 +33,9 @@ export default {
     }
   },
   methods: {
+    pushHome () {
+      this.$router.push({ name: 'Home' })
+    },
     logout () {
       this.$store.dispatch('logout')
     }
@@ -46,6 +44,13 @@ export default {
 </script>
 
 <style scoped>
+img.logo {
+  cursor: pointer;
+  transition: transform .2s;
+}
+img.logo:hover {
+  transform: scale(1.03, 1.03);
+}
 .button {
   background-color: #1C4A7C; /* Green */
   border: none;
@@ -56,10 +61,16 @@ export default {
   display: inline-block;
   font-size: 1.2rem;
   cursor: pointer;
+  margin: 1rem;
+  padding: 0.7rem;
+  transition: transform .2s;
+}
+.button:hover {
+  transform: scale(1.1, 1.1);
 }
 .container {
   display: flex;
   justify-content: space-between;
-  padding: 0 0.5rem 1rem 0.5rem;
+  padding: 0 0.5rem;
 }
 </style>

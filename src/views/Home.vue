@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!!stages"
     class="grid-wrapper"
     :style="(mobileDevice) ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
   >
@@ -13,8 +14,9 @@
 
 <script>
 // @ is an alias to /src
+import axios from 'axios'
 import Stage from '@/components/Stage.vue'
-import stages from '@/assets/data/stages.js'
+const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 
 export default {
   name: 'Home',
@@ -23,8 +25,14 @@ export default {
   },
   data () {
     return {
-      stages: stages
+      stages: null
     }
+  },
+  created: function () {
+    // fetch UI content
+    axios
+      .post('//' + backendHost + ':3000/content', { content: 'stages' })
+      .then(({ data }) => { this.stages = data })
   },
   computed: {
     mobileDevice () {
