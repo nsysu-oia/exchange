@@ -1,19 +1,19 @@
 <template>
   <div :style="sectionStyle(1, stage.style)">
     <router-link
-      :to="{name: 'StageDetails', params: { id: stage.id } }"
+      :to="{name: 'StageDetails', params: { stageTitle: stage.title } }"
       class="stage-title-link"
     >
-      <div class="stage-title" :style="stage.style" >{{ stage.id }}</div>
+      <div class="stage-title" :style="stage.style" >{{ stage.title }}</div>
     </router-link>
   </div>
 
   <div :style="sectionStyle(2, stage.style)">
     <ul v-if="stage.notes.length" class="note">
       <li
-        v-for="note in stage.notes"
-        :key="note.id"
-      >{{ note.title }}</li>
+        v-for="(note, index) in stage.notes"
+        :key="index"
+        >{{ note.title }}</li>
     </ul>
   </div>
 
@@ -21,8 +21,8 @@
     <div v-if="!mobileDevice || !!stage.applies.length" class="section-title" :style="stage.style">申請或登錄</div>
     <ul v-if="stage.applies.length">
       <li
-        v-for="apply in stage.applies"
-        :key="apply.id"
+        v-for="(apply, index) in stage.applies"
+        :key="index"
         :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
       >{{ apply.title }}</li>
     </ul>
@@ -32,8 +32,8 @@
     <div v-if="!mobileDevice || !!stage.uploads.length" class="section-title" :style="stage.style">上傳檔案區</div>
     <ul v-if="stage.uploads.length">
       <li
-        v-for="upload in stage.uploads"
-        :key="upload.id"
+        v-for="(upload, index) in stage.uploads"
+        :key="index"
         :style="{ listStyle: 'url(' + icons[2] + ')' }"
       >{{ upload.title }}</li>
     </ul>
@@ -45,8 +45,8 @@
       <!-- we will need this ul on the mobile devices even if no downloads.
            So we can present the bottom border-radius --->
       <li
-        v-for="download in stage.downloads"
-        :key="download.id"
+        v-for="(download, index) in stage.downloads"
+        :key="index"
         :style="{ listStyle: 'url(' + icons[3] + ')' }"
       >{{ download.title }}</li>
     </ul>

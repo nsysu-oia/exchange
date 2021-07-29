@@ -1,31 +1,32 @@
 <template>
+  <p v-if="!!errMsg">{{ errMsg }}</p>
   <template v-if="!!stage">
-    <div>{{ stage.id }}</div>
+    <div>{{ stage.title }}</div>
     <ul v-if="stage.notes.length">
       <li
-        v-for="note in stage.notes"
-        :key="note.id"
+        v-for="(note, index) in stage.notes"
+        :key="index"
       >{{ note.title }}</li>
     </ul>
     <div v-if="!mobileDevice || stage.applies.length">申請或登錄</div>
     <ul :v-if="stage.applies.length">
       <li
-        v-for="apply in stage.applies"
-        :key="apply.id"
+        v-for="(apply, index) in stage.applies"
+        :key="index"
       >{{ apply.title }}</li>
     </ul>
     <div v-if="!mobileDevice || stage.uploads.length">上傳檔案區</div>
     <ul :v-if="stage.uploads.length">
       <li
-        v-for="upload in stage.uploads"
-        :key="upload.id"
+        v-for="(upload, index) in stage.uploads"
+        :key="index"
       >{{ upload.title }}</li>
     </ul>
     <div v-if="!mobileDevice || stage.downloads.length">下載檔案區</div>
     <ul :v-if="stage.downloads.length">
       <li
-        v-for="download in stage.downloads"
-        :key="download.id"
+        v-for="(download, index) in stage.downloads"
+        :key="index"
       >{{ download.title }}</li>
     </ul>
   </template>
@@ -37,17 +38,29 @@ const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 
 export default {
   name: 'StageDetails',
-  props: ['id'],
+  props: ['stageTitle'],
   data () {
     return {
-      stage: null
+      stage: null,
+      errMsg: null
     }
   },
   created: function () {
     // fetch UI content
+    const content = 'stages'
     axios
-      .post('//' + backendHost + ':3000/content', { content: 'stages' })
-      .then(({ data }) => { this.stage = data.find(stage => stage.id === this.id) })
+      .post('//' + backendHost + ':3000/content', { content })
+      .then(({ data }) => {
+        this.stage = data.find(stage => stage.title === this.stageTitle)
+        if (!this.stage) {
+          this.errMsg = 'Cannot find the stage: ' + this.stageTitle
+        }
+      })
+      .catch(err => {
+        if (err.response.status === 400) {
+          this.errMsg = 'Cannot fetch the content: ' + content
+        }
+      })
   },
   computed: {
     mobileDevice () {

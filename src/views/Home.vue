@@ -1,12 +1,13 @@
 <template>
+  <p v-if="!!errMsg">{{ errMsg }}</p>
   <div
     v-if="!!stages"
     class="grid-wrapper"
     :style="(mobileDevice) ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
   >
     <Stage
-      v-for="stage in stages"
-      :key="stage.id"
+      v-for="(stage, index) in stages"
+      :key="index"
       :stage="stage"
     />
   </div>
@@ -25,14 +26,21 @@ export default {
   },
   data () {
     return {
-      stages: null
+      stages: null,
+      errMsg: null
     }
   },
   created: function () {
     // fetch UI content
+    const content = 'stages'
     axios
-      .post('//' + backendHost + ':3000/content', { content: 'stages' })
+      .post('//' + backendHost + ':3000/content', { content })
       .then(({ data }) => { this.stages = data })
+      .catch(err => {
+        if (err.response.status === 400) {
+          this.errMsg = 'Cannot fetch the content: ' + content
+        }
+      })
   },
   computed: {
     mobileDevice () {
