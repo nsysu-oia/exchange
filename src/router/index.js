@@ -17,7 +17,7 @@ const router = createRouter({
     },
     {
       path: '/%E8%BF%94%E5%9C%8B%E5%A0%B1%E5%91%8A%E6%9B%B8', // 返國報告書
-      name: 'returnReport',
+      name: 'ReturnReport',
       component: () => import('@/views/ReturnReport/Home.vue')
     },
     {

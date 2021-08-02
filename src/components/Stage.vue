@@ -1,7 +1,7 @@
 <template>
   <div :style="sectionStyle(1, stage.style)">
     <router-link
-      :to="{name: 'StageDetails', params: { stageTitle: stage.title } }"
+      :to="{ name: 'StageDetails', params: { stageTitle: stage.title } }"
       class="stage-title-link"
     >
       <div class="stage-title" :style="stage.style" >{{ stage.title }}</div>
@@ -24,7 +24,10 @@
         v-for="(apply, index) in stage.applies"
         :key="index"
         :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
-      >{{ apply.title }}</li>
+      >
+      <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
+        <template v-else>{{ apply.title }}</template>
+      </li>
     </ul>
   </div>
 
@@ -110,6 +113,13 @@ export default {
 </script>
 
 <style scoped>
+a {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+}
 li {
   text-align: left;
   padding: 5px;

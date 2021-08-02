@@ -48,9 +48,6 @@ export default createStore({
     CLR_USER () {
       localStorage.removeItem('user')
       location.reload()
-    },
-    UPDATE_SECTION_HEIGHTS (state, heights) {
-
     }
   },
   actions: {
