@@ -4,20 +4,24 @@
     <div v-for="(question, name, questionIndex) in questions[section]" :key="questionIndex">
       <label :for="question.label">{{ question.label }}</label>
       <!-- select -->
-      <select v-if="question.type === 'select'" :id="question.label">
+      <select
+        v-if="question.type === 'select'"
+        :id="question.label"
+        v-model="question.value"
+      >
+        <option disabled value="">請選擇</option>
         <option
           v-for="(option, optionIndex) in question.options"
           :key="optionIndex"
-          :value="option"
         >{{ option }}</option>
       </select>
       <!-- textarea -->
-      <textarea v-else-if="question.type === 'textarea'" :id="question.label" />
+      <textarea v-else-if="question.type === 'textarea'" :id="question.label" v-model="question.value" />
       <!-- checkbox -->
       <div v-else-if="question.type === 'checkbox'">
         <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
+          <input type="checkbox" :id="option" :value="option" v-model="question.value" />
           <label :for="option">{{ option }}</label>
-          <input type="checkbox" :id="option" />
           <input v-if="option === '其他'" type=text>
         </div>
       </div>
@@ -40,18 +44,22 @@ export default {
   name: 'Home',
   data () {
     return {
-      questions: require('@/assets/data/return-report.yaml')
+      questions: require('@/assets/contents/return-report.yaml')
     }
   },
   created () {
     axios
       .get('//' + backendHost + ':3000/return-report')
       .then(({ data }) => {
-        for (const property in this.questions['基本資料']) {
-          this.questions['基本資料'][property].value = data[property]
+        console.log(data)
+        for (const section in this.questions) {
+          for (const question in this.questions[section]) {
+            this.questions[section][question].value = data[question]
+          }
         }
-        const today = new Date()
-        this.questions['基本資料'].fillDate.value = today.toISOString().split('T')[0]
+        // update the fillDate to today
+        // const today = new Date()
+        // this.questions['基本資料'].fillDate.value = today.toISOString().split('T')[0]
       })
   },
   computed: {

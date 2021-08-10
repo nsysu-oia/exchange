@@ -102,7 +102,7 @@
     readonly: true
   duration: 
     label: 實際停留期間
-    value: 
+    value:
     type: select
     options:
       - 1個月
@@ -167,6 +167,7 @@
     label: 總金額
     value: 
     type: number
+    readonly: true
   householdIncome:
     label: 請問您的家庭年收入為？
     value: 
@@ -418,11 +419,11 @@
   satisfactionUniversityDetail:
     label: 整體而言，你最滿意研修學校的哪些地方?
     value: 
-    type: text
+    type: textarea
   dissatisfactionUniversityDetail:
     label: 整體而言，你最不滿意研修學校的哪些地方?
     value: 
-    type: text
+    type: textarea
 社團、聯繫:
   studentClub:
     label: 你是否有參加社團

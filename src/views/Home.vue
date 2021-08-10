@@ -22,7 +22,7 @@ export default {
   },
   data () {
     return {
-      stages: require('@/assets/data/stages.yaml')
+      stages: require('@/assets/contents/stages.yaml')
     }
   },
   computed: {
