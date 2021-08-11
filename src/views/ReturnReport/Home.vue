@@ -1,13 +1,14 @@
 <template>
   <div v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex">
     <h2>{{ section }}</h2>
-    <div v-for="(question, name, questionIndex) in questions[section]" :key="questionIndex">
-      <label :for="question.label">{{ question.label }}</label>
+    <div v-for="(question, identifier, questionIndex) in questions[section]" :key="questionIndex">
+      <label :for="section+';'+identifier">{{ question.label }}</label>
       <!-- select -->
       <select
         v-if="question.type === 'select'"
-        :id="question.label"
+        :id="section+';'+identifier"
         v-model="question.value"
+        @change="syncDB"
       >
         <option disabled value="">請選擇</option>
         <option
@@ -16,12 +17,22 @@
         >{{ option }}</option>
       </select>
       <!-- textarea -->
-      <textarea v-else-if="question.type === 'textarea'" :id="question.label" v-model="question.value" />
+      <textarea
+        v-else-if="question.type === 'textarea'"
+        :id="section+';'+identifier" v-model.lazy="question.value"
+        @change="syncDB"
+      />
       <!-- checkbox -->
       <div v-else-if="question.type === 'checkbox'">
         <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
-          <input type="checkbox" :id="option" :value="option" v-model="question.value" />
-          <label :for="option">{{ option }}</label>
+          <input
+            type="checkbox"
+            :id="section+';'+identifier+';'+option"
+            :value="option"
+            v-model="question.value"
+            @change="syncDB"
+          />
+          <label :for="section+';'+identifier+';'+option">{{ option }}</label>
           <input v-if="option === '其他'" type=text>
         </div>
       </div>
@@ -29,9 +40,10 @@
       <input
         v-else
         :type="question.type"
-        :id="question.label"
-        v-model="question.value"
+        :id="section+';'+identifier"
+        v-model.lazy="question.value"
         :readonly="question.readonly"
+        @change="syncDB"
       />
     </div>
   </div>
@@ -51,7 +63,6 @@ export default {
     axios
       .get('//' + backendHost + ':3000/return-report')
       .then(({ data }) => {
-        console.log(data)
         for (const section in this.questions) {
           for (const question in this.questions[section]) {
             this.questions[section][question].value = data[question]
@@ -72,6 +83,17 @@ export default {
         default:
           return false
       }
+    }
+  },
+  methods: {
+    syncDB (e) {
+      const ids = e.target.id.split(';')
+      console.log(ids)
+      axios
+        .post('//' + backendHost + ':3000/return-report', {
+          identifier: ids[1],
+          value: this.questions[ids[0]][ids[1]].value
+        })
     }
   }
 }
