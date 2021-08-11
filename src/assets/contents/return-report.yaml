@@ -233,7 +233,7 @@
 動機與收穫:
   motivations:
     label: 最初選擇出國研修的動機 (複選)
-    value: 
+    value: []
     type: checkbox
     options:
       - 想增進外語能力
@@ -255,9 +255,10 @@
       - 獎助學金支援
       - 畢業門檻
       - 其他
+    otherDetail:
   gains:
     label: 出國研修的收穫(複選)
-    value: 
+    value: []
     type: checkbox
     options:
       - 想增進外語能力
@@ -268,6 +269,7 @@
       - 與國外學生與學者交流，結交許多良師益友
       - 確立未來出國進修方向
       - 其他
+    otherDetail:
   gainPrimary:
     label: 最大的收穫
     value: 

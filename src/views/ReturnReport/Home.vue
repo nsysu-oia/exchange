@@ -33,7 +33,13 @@
             @change="syncDB"
           />
           <label :for="section+';'+identifier+';'+option">{{ option }}</label>
-          <input v-if="option === '其他'" type=text>
+          <input
+            v-if="option==='其他' && question.value.includes(option)"
+            type=text
+            v-model.lazy="question.otherDetail"
+            :id="section+';'+identifier+';otherDetail'"
+            @change="otherDetailSyncDB"
+          />
         </div>
       </div>
       <!-- input -->
@@ -66,11 +72,11 @@ export default {
         for (const section in this.questions) {
           for (const question in this.questions[section]) {
             this.questions[section][question].value = data[question]
+            if (this.questions[section][question].type === 'checkbox') {
+              this.questions[section][question].otherDetail = data[question.slice(0, -1) + 'OtherDetail']
+            }
           }
         }
-        // update the fillDate to today
-        // const today = new Date()
-        // this.questions['基本資料'].fillDate.value = today.toISOString().split('T')[0]
       })
   },
   computed: {
@@ -83,16 +89,31 @@ export default {
         default:
           return false
       }
+    },
+    today () {
+      const today = new Date()
+      return today.toISOString().split('T')[0]
     }
   },
   methods: {
     syncDB (e) {
+      this.questions.基本資料.fillDate.value = this.today
       const ids = e.target.id.split(';')
-      console.log(ids)
       axios
         .post('//' + backendHost + ':3000/return-report', {
           identifier: ids[1],
-          value: this.questions[ids[0]][ids[1]].value
+          value: this.questions[ids[0]][ids[1]].value,
+          fillDate: this.today
+        })
+    },
+    otherDetailSyncDB (e) {
+      this.questions.基本資料.fillDate.value = this.today
+      const ids = e.target.id.split(';')
+      axios
+        .post('//' + backendHost + ':3000/return-report', {
+          identifier: ids[1].slice(0, -1) + 'OtherDetail',
+          value: this.questions[ids[0]][ids[1]].otherDetail,
+          fillDate: this.today
         })
     }
   }
