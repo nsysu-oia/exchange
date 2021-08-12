@@ -168,6 +168,17 @@
     value: 
     type: number
     readonly: true
+    isSumOf:
+      - costVisa
+      - costTicket
+      - costInsurance
+      - costHousing
+      - costLiving
+      - costCommuting
+      - costTravel
+      - costTextbook
+      - costLanguageSchool
+      - costOther
   householdIncome:
     label: 請問您的家庭年收入為？
     value: 
@@ -361,6 +372,10 @@
     options:
       - 有
       - 沒有
+    dependency:
+      - 課程、活動
+      - laboratory
+    dependencyValue: 有
   paper:
     label: 你是否有針對實驗成果發表論文？
     value: 
@@ -368,6 +383,10 @@
     options:
       - 有
       - 沒有
+    dependency:
+      - 課程、活動
+      - laboratory
+    dependencyValue: 有
   satisfactionCourseEnrollment:
     label: 你對於研修學校的選課安排(選課流程簡單、好選到自己想要的課等等) 的滿意程度
     value: 
@@ -438,6 +457,10 @@
     label: 參加的社團名稱
     value: 
     type: text
+    dependency:
+      - 社團、聯繫
+      - studentClub
+    dependencyValue: 有
   studentClubRecommendation:
     label: 推薦學弟妹加入社團的意願程度
     value: 
@@ -448,10 +471,18 @@
       - 普通
       - 無意願
       - 完全無意願
+    dependency:
+      - 社團、聯繫
+      - studentClub
+    dependencyValue: 有
   studentClubReview:
     label: 參加社團的感想
     value: 
     type: textarea
+    dependency:
+      - 社團、聯繫
+      - studentClub
+    dependencyValue: 有
   contact:
     label: 是否願意留下聯絡資訊給有興趣的學弟妹
     value: 
@@ -463,6 +494,10 @@
     label: 聯絡資訊 (Email、手機、FB、Twitter、IG、Blog、YouTube等)
     value: 
     type: textarea
+    dependency:
+      - 社團、聯繫
+      - contact
+    dependencyValue: 願意
 心得報告:
   reportIntroduction:
     label: 學校簡介
