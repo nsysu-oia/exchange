@@ -12,6 +12,8 @@
             :id="section+';'+identifier"
             v-model="question.value"
             @change="syncDB"
+            @blur="validate"
+            @input="removeMark"
           >
             <option disabled value="">請選擇</option>
             <option
@@ -23,8 +25,11 @@
           <textarea
             class="js-autoresize"
             v-else-if="question.type === 'textarea'"
+            :placeholder="question.required ? '必填' : null"
             :id="section+';'+identifier" v-model.lazy="question.value"
             @change="syncDB"
+            @blur="validate"
+            @input="removeMark"
           />
           <!-- checkbox -->
           <div v-else-if="question.type === 'checkbox'">
@@ -50,11 +55,14 @@
           <!-- input -->
           <input
             v-else
+            :placeholder="question.required ? '必填' : null"
             :type="question.type"
             :id="section+';'+identifier"
             v-model.lazy="question.value"
             :readonly="question.readonly"
             @change="syncDB"
+            @blur="validate"
+            @input="removeMark"
             v-on="{ keypress: (question.type === 'number') ? isNumber : null }"
           />
           <!-- v-on syntax above: https://github.com/vuejs/vue/issues/7349#issuecomment-354937350 -->
@@ -69,7 +77,8 @@
 import axios from 'axios'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 function resize () {
-  this.style.height = `${this.scrollHeight}px`
+  this.style.height = 'auto' // shrink
+  this.style.height = `${this.scrollHeight}px` // grow
 }
 export default {
   name: 'Home',
@@ -144,12 +153,15 @@ export default {
     },
     syncDB (e) {
       const ids = e.target.id.split(';')
-      const values = {}
+      const values = {} // values to be send to backend
       values[ids[1]] = this.questions[ids[0]][ids[1]].value
       values.fillDate = this.today
       this.questions.基本資料.fillDate.value = values.fillDate
 
       if (e.target.type === 'number' && ids[1].substring(0, 4) === 'cost') {
+        if (!e.target.value) { // empty string
+          this.questions[ids[0]][ids[1]].value = '0'
+        }
         // an exception for handling costTotal
         let costTotal = 0
         for (const index in this.questions[ids[0]].costTotal.isSumOf) {
@@ -171,6 +183,20 @@ export default {
       this.questions.基本資料.fillDate.value = values.fillDate
       axios
         .post('//' + backendHost + ':3000/return-report', { values })
+    },
+    validate (e) {
+      const ids = e.target.id.split(';')
+      const question = this.questions[ids[0]][ids[1]]
+      if (question.required) {
+        if (!question.value) {
+          e.target.style['border-color'] = '#e30000'
+          e.target.style['background-color'] = '#fff2f4'
+        }
+      }
+    },
+    removeMark (e) {
+      e.target.style.removeProperty('border-color')
+      e.target.style.removeProperty('background-color')
     }
   }
 }

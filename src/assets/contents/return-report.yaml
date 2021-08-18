@@ -5,101 +5,121 @@
     value: 
     type: text
     readonly: true
+    required: true
   fillDate:
     label: 撰寫日期
     value: 
     type: date
     readonly: true
+    required: true
   studentID: 
     label: 學號
     value: 
     type: text
     readonly: true
+    required: true
   yearApply: 
     label: 甄選年度/出境類別
     value: 
     type: text
     readonly: true
+    required: true
   program: 
     label: 地區
     value: 
     type: text
     readonly: true
+    required: true
   collegeChi: 
     label: 中文學院
     value: 
     type: text
     readonly: true
+    required: true
   departmentChi: 
     label: 中文系所
     value: 
     type: text
     readonly: true
+    required: true
   collegeEng: 
     label: 英文學院
     value: 
     type: text
     readonly: true
+    required: true
   departmentEng: 
     label: 英文系所
     value: 
     type: text
     readonly: true
+    required: true
   degree: 
     label: 學位
     value: 
     type: text
     readonly: true
+    required: true
   grade: 
     label: 年級
     value: 
     type: text
     readonly: true
+    required: true
   continentChi: 
     label: 中文州別
     value: 
     type: text
     readonly: true
+    required: true
   countryChi: 
     label: 中文國別
     value: 
     type: text
     readonly: true
+    required: true
   universityChi: 
     label: 中文交換/研修校名
     value: 
     type: text
     readonly: true
+    required: true
   continentEng: 
     label: 英文州別
     value: 
     type: text
     readonly: true
+    required: true
   countryEng: 
     label: 英文國別
     value: 
     type: text
     readonly: true
+    required: true
   universityEng: 
     label: 英文交換/研修校名
     value: 
     type: text
     readonly: true
+    required: true
   exchangeDepartmentChi: 
     label: 中文交換/研修系所
     value: 
     type: text
     readonly: true
+    required: true
   exchangeDepartmentEng: 
     label: 英文交換/研修系所
     value: 
     type: text
     readonly: true
+    required: true
   semester: 
     label: 交換/研修期間
     value: 
     type: text
     readonly: true
+    required: true
   duration: 
     label: 實際停留期間
     value:
@@ -117,6 +137,7 @@
       - 10個月
       - 11個月
       - 12個月
+    required: true
   scholarship: 
     label: 獎助來源
     value: 
@@ -127,42 +148,52 @@
     label: 簽證費
     value: 
     type: number
+    required: true
   costTicket:
     label: 機票費
     value: 
     type: number
+    required: true
   costInsurance:
     label: 保險費
     value: 
     type: number
+    required: true
   costHousing:
     label: 住宿費
     value: 
     type: number
+    required: true
   costLiving:
     label: 生活費
     value: 
     type: number
+    required: true
   costCommuting:
     label: 交通費
     value: 
     type: number
+    required: true
   costTravel:
     label: 旅遊費
     value: 
     type: number
+    required: true
   costTextbook:
     label: 書籍費
     value: 
     type: number
+    required: true
   costLanguageSchool:
     label: 語言學校費用
     value: 
     type: number
+    required: true
   costOther:
     label: 其他費用
     value: 
     type: number
+    required: true
   costTotal:
     label: 總金額
     value: 
@@ -179,6 +210,7 @@
       - costTextbook
       - costLanguageSchool
       - costOther
+    required: true
   householdIncome:
     label: 請問您的家庭年收入為？
     value: 
@@ -193,6 +225,7 @@
       - 31-60萬
       - 30萬以下
       - 符合低收入戶
+    required: true
   SES:
     label: 請問您認為您家庭的社會經濟地位是屬於哪一階層？
     value: 
@@ -203,6 +236,7 @@
       - 中層
       - 中下層
       - 下層
+    required: true
 住宿:
   housing:
     label: 至交換/研修/寒暑期學校就讀期間的住宿？
@@ -216,6 +250,7 @@
       - 自己尋找的住宿家庭
       - 住自己的親友家
       - 其他
+    required: true
   housingDistance:
     label: 離學校多遠？
     value: 
@@ -227,6 +262,7 @@
       - 搭車半小時內
       - 搭車半小時～一小時
       - 搭車一小時以上
+    required: true
   satisfactionHousing:
     label: 對於住宿的滿意度
     value: 
@@ -237,10 +273,12 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionHousingDetail:
     label: 滿意/不滿意的原因
     value: 
     type: textarea
+    required: true
 動機與收穫:
   motivations:
     label: 最初選擇出國研修的動機 (複選)
@@ -254,6 +292,7 @@
       - 獎助學金支援
       - 畢業門檻
       - 其他
+    required: true
   motivationPrimary:
     label: 最主要的動機
     value: 
@@ -267,6 +306,7 @@
       - 畢業門檻
       - 其他
     otherDetail:
+    required: true
   gains:
     label: 出國研修的收穫(複選)
     value: []
@@ -281,6 +321,7 @@
       - 確立未來出國進修方向
       - 其他
     otherDetail:
+    required: true
   gainPrimary:
     label: 最大的收穫
     value: 
@@ -294,6 +335,7 @@
       - 與國外學生與學者交流，結交許多良師益友
       - 確立未來出國進修方向
       - 其他
+    required: true
 學業表現:
   satisfactionComprehension:
     label: 整體來說，我認為自己在課程內容之吸收瞭解程度為何？
@@ -305,6 +347,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionCourse:
     label: 整體來說，我對自己在課程上表現之滿意程度 (包括上課互動、同學間的互動、考試成績等等)
     value: 
@@ -315,6 +358,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionPerformance:
     label: 整體而言，我對自己在研修學校的表現的滿意程度 (包括上課、學校內的活動等等)
     value: 
@@ -325,14 +369,17 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   problemCourse:
     label: 研修期間，遭遇的最大關於課程方面的問題？
     value: 
     type: textarea
+    required: true
   problemCourseSolution:
     label: (承上題)，你的解決方式是?
     value: 
     type: textarea
+    required: true
   satisfactionStudyAbroad:
     label: 此次研修體驗對我我畢業後繼續出國深造之意願。
     value: 
@@ -343,6 +390,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionRecommendation:
     label: 你向其他同學或學弟妹推薦此研修學校的之意願程度。
     value: 
@@ -353,10 +401,12 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionRecommendationDetail:
     label: (承上題)，推薦/不推薦的原因是?
     value: 
     type: textarea
+    required: true
 課程、活動:
   laboratory:
     label: 此次是否有進交換/研修/寒暑期學校實驗室？
@@ -365,6 +415,7 @@
     options:
       - 有
       - 沒有
+    required: true
   experiment:
     label: 回國後是否繼續進行該項實驗？
     value: 
@@ -376,6 +427,7 @@
       - 課程、活動
       - laboratory
     dependencyValue: 有
+    required: true
   paper:
     label: 你是否有針對實驗成果發表論文？
     value: 
@@ -387,6 +439,7 @@
       - 課程、活動
       - laboratory
     dependencyValue: 有
+    required: true
   satisfactionCourseEnrollment:
     label: 你對於研修學校的選課安排(選課流程簡單、好選到自己想要的課等等) 的滿意程度
     value: 
@@ -397,6 +450,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionCourseSchedule:
     label: 你對於研修學校的課程安排(時間安排、課程內容、師資專業等等) 的滿意程度
     value: 
@@ -407,6 +461,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionBuddyProgram:
     label: 你對於研修學校BUDDY PROGRAM安排的滿意程度
     value: 
@@ -417,6 +472,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionEvent:
     label: 你對於研修學校的活動安排(聚會、PARTY、小旅遊等) 的滿意程度
     value: 
@@ -427,6 +483,7 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionUniversity:
     label: 整體而言，你對研修學校的滿意程度為何?
     value: 
@@ -437,14 +494,17 @@
       - 普通
       - 不滿意
       - 非常不滿意
+    required: true
   satisfactionUniversityDetail:
     label: 整體而言，你最滿意研修學校的哪些地方?
     value: 
     type: textarea
+    required: true
   dissatisfactionUniversityDetail:
     label: 整體而言，你最不滿意研修學校的哪些地方?
     value: 
     type: textarea
+    required: true
 社團、聯繫:
   studentClub:
     label: 你是否有參加社團
@@ -453,6 +513,7 @@
     options:
       - 有
       - 沒有
+    required: true
   studentClubName:
     label: 參加的社團名稱
     value: 
@@ -461,6 +522,7 @@
       - 社團、聯繫
       - studentClub
     dependencyValue: 有
+    required: true
   studentClubRecommendation:
     label: 推薦學弟妹加入社團的意願程度
     value: 
@@ -475,6 +537,7 @@
       - 社團、聯繫
       - studentClub
     dependencyValue: 有
+    required: true
   studentClubReview:
     label: 參加社團的感想
     value: 
@@ -483,6 +546,7 @@
       - 社團、聯繫
       - studentClub
     dependencyValue: 有
+    required: true
   contact:
     label: 是否願意留下聯絡資訊給有興趣的學弟妹
     value: 
@@ -490,6 +554,7 @@
     options:
       - 願意
       - 不願意
+    required: true
   contactDetail:
     label: 聯絡資訊 (Email、手機、FB、Twitter、IG、Blog、YouTube等)
     value: 
@@ -498,45 +563,56 @@
       - 社團、聯繫
       - contact
     dependencyValue: 願意
+    required: true
 心得報告:
   reportIntroduction:
     label: 學校簡介
     value: 
     type: textarea
+    required: true
   reportCurriculum:
     label: 國外研修之課程學習（課內），另外推薦受益最多/最喜歡的課程
     value: 
     type: textarea
+    required: true
   reportExtraCurriculum:
     label: 國外研修之生活學習（課外）
     value: 
     type: textarea
+    required: true
   reportBenefit:
     label: 交換/研修之具體效益（請條列式列舉）
     value: 
     type: textarea
+    required: true
   reportDifficulty:
     label: 海外生活期間是否曾遭遇困境，及是否解決問題? 如是，請說明如何解決問題;如未解決，請說明事件最大的啟發及思考未來可以怎麼解決?
     value: 
     type: textarea
+    required: true
   reportCultralDifference:
     label: 海外生活期間是否曾遭遇文化衝擊，您如何去面對及適應?
     value: 
     type: textarea
+    required: true
   reportGrow:
     label: 海外生活歷練是否為您人生帶來不一樣的改變或者個人特質上的轉變，最大的成長是什麼?
     value: 
     type: textarea
+    required: true
   reportScholarship:
     label: 您認為獎學金對您海外研修最大的幫助是什麼? 有無獎學金是否會改變您的出國計畫?
     value: 
     type: textarea
+    required: true
   reportTestimonial:
     label: 感言及心得感想
     value: 
     type: textarea
+    required: true
   reportEnglish:
     label: 英文心得(包含學校簡介、課程學習、生活學習、具體效益、心得感想等等)
     value: 
     type: textarea
+    required: true
 ...
