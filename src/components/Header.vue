@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <img :src="logo" alt="OIA logo" class="logo" :style="{ 'width': logoWidth }" @click="pushHome">
-    <button v-if="user" type="button" class="button" @click="logout">Logout</button>
+    <button v-if="user" type="button" class="button" @click="logout" :style="{ 'font-size': buttonFontSize }">登出</button>
   </div>
 </template>
 
@@ -30,6 +30,14 @@ export default {
         default:
           return '50%'
       }
+    },
+    buttonFontSize () {
+      switch (this.$store.state.windowSize) {
+        case 'xs':
+          return '12px'
+        default:
+          return '18px'
+      }
     }
   },
   methods: {
@@ -54,16 +62,16 @@ img.logo:hover {
 .button {
   background-color: #1C4A7C; /* Green */
   border: none;
-  border-radius: 8px;
+  border-radius: 25px;
   color: white;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 1.2rem;
   cursor: pointer;
-  margin: 1rem;
-  padding: 0.7rem;
+  margin: auto 10px;
+  padding: 5px 20px;
   transition: transform .2s;
+  font-family:inherit;
 }
 .button:hover {
   transform: scale(1.1, 1.1);

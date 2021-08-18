@@ -1,10 +1,11 @@
 <template>
-  <template v-if="!!questions">
-    <div v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex">
+  <h1>返國報告書</h1>
+  <div v-if="!!questions" ref="contents">
+    <div class="section" v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex" :style="{ 'width': sectionWidth }">
       <h2>{{ section }}</h2>
       <div v-for="(question, identifier, questionIndex) in questions[section]" :key="questionIndex">
         <template v-if="checkDependency(question.dependency, question.dependencyValue)">
-          <label :for="section+';'+identifier">{{ question.label }}</label>
+          <label class="question" :for="section+';'+identifier">{{ question.label }}</label>
           <!-- select -->
           <select
             v-if="question.type === 'select'"
@@ -20,6 +21,7 @@
           </select>
           <!-- textarea -->
           <textarea
+            class="js-autoresize"
             v-else-if="question.type === 'textarea'"
             :id="section+';'+identifier" v-model.lazy="question.value"
             @change="syncDB"
@@ -33,6 +35,7 @@
                 :value="option"
                 v-model="question.value"
                 @change="syncDB"
+                style="width: initial;"
               />
               <label :for="section+';'+identifier+';'+option">{{ option }}</label>
               <input
@@ -58,12 +61,16 @@
         </template>
       </div>
     </div>
-  </template>
+  </div>
+  <p style="margin-top: 30px">&nbsp;</p>
 </template>
 
 <script>
 import axios from 'axios'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
+function resize () {
+  this.style.height = `${this.scrollHeight}px`
+}
 export default {
   name: 'Home',
   data () {
@@ -86,17 +93,31 @@ export default {
             }
           }
         }
+        this.$nextTick(function () {
+          const targets = this.$refs.contents.querySelectorAll('.js-autoresize')
+          targets.forEach(target => {
+            target.style.height = `${target.scrollHeight}px`
+          })
+        })
       })
   },
+  mounted () {
+    this.$nextTick(function () {
+      const targets = this.$refs.contents.querySelectorAll('.js-autoresize')
+      targets.forEach(target => {
+        target.style.height = `${target.scrollHeight}px`
+        target.addEventListener('input', resize)
+      })
+    })
+  },
   computed: {
-    mobileDevice () {
+    sectionWidth () {
       switch (this.$store.state.windowSize) {
         case 'xs':
         case 'sm':
-        case 'md':
-          return true
+          return '85%'
         default:
-          return false
+          return '50%'
       }
     },
     today () {
@@ -156,4 +177,30 @@ export default {
 </script>
 
 <style scoped>
+input, select, textarea {
+  font-size: 16px;
+  line-height: 24px;
+  padding: 5px 10px;
+  border: .0625rem solid #d2d2d7;
+  border-radius: .25rem;
+  width: 100%;
+  color: #1d1d1f;
+  box-sizing: border-box;
+  font-family:inherit;
+}
+input:read-only {
+  background-color: #f1f1f1;
+}
+label.question {
+  display: block;
+  font-size: 18px;
+  padding: 15px 0 5px 0;
+}
+h2 {
+  padding-top: 15px;
+}
+.section {
+  text-align: left;
+  margin: 0 auto;
+}
 </style>
