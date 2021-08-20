@@ -1,5 +1,6 @@
 <template>
   <h1>返國報告書</h1>
+  <button type="button" class="button" @click="validateAndExport">預覽報告書並上傳雲端</button>
   <div v-if="!!questions" ref="contents">
     <div class="section" v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex" :style="{ 'width': sectionWidth }">
       <h2>{{ section }}</h2>
@@ -75,6 +76,7 @@
 
 <script>
 import axios from 'axios'
+import makeReport from './MakeReport'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 function resize () {
   this.style.height = 'auto' // shrink
@@ -197,6 +199,9 @@ export default {
     removeMark (e) {
       e.target.style.removeProperty('border-color')
       e.target.style.removeProperty('background-color')
+    },
+    validateAndExport () {
+      makeReport(this.questions)
     }
   }
 }
@@ -228,5 +233,20 @@ h2 {
 .section {
   text-align: left;
   margin: 0 auto;
+}
+.button {
+  background-color: #1C4A7C; /* Green */
+  border: none;
+  border-radius: 25px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  margin: auto 10px;
+  padding: 5px 20px;
+  transition: transform .2s;
+  font-family:inherit;
+  font-size: 17px;
 }
 </style>

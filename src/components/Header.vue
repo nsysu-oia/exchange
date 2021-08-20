@@ -16,9 +16,9 @@ export default {
       switch (this.$store.state.windowSize) {
         case 'xs':
         case 'sm':
-          return require('@/assets/logos/logo-mobile.png')
+          return require('@/assets/logos/logo-mobile.webp')
         default:
-          return require('@/assets/logos/logo-desktop.png')
+          return require('@/assets/logos/logo-desktop.webp')
       }
     },
     logoWidth () {
@@ -72,9 +72,6 @@ img.logo:hover {
   padding: 5px 20px;
   transition: transform .2s;
   font-family:inherit;
-}
-.button:hover {
-  transform: scale(1.1, 1.1);
 }
 .container {
   display: flex;

@@ -148,7 +148,7 @@ export default {
 <style scoped>
 .bg {
   /* The image used */
-  background-image: url('~@/assets/images/bg.jpg');
+  background-image: url('~@/assets/images/bg.webp');
 
   /* Full height */
   height: 100%;
