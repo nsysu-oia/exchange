@@ -202,6 +202,9 @@ export default {
     },
     validateAndExport () {
       makeReport(this.questions)
+        .then(report => {
+          report.open()
+        })
     }
   }
 }
