@@ -1,6 +1,10 @@
 <template>
   <h1>返國報告書</h1>
-  <button type="button" class="button" @click="validateAndExport">預覽報告書並上傳雲端</button>
+  <div class="export" :style="{ 'width': sectionWidth }">
+    <p><b>預覽報告書並提交至國際處</b></p>
+    <button type="button" class="button" @click="validateAndExportForm">研修資訊</button>
+    <button type="button" class="button" @click="validateAndExportReview">心得感想</button>
+  </div>
   <div v-if="!!questions" ref="contents">
     <div class="section" v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex" :style="{ 'width': sectionWidth }">
       <h2>{{ section }}</h2>
@@ -76,7 +80,7 @@
 
 <script>
 import axios from 'axios'
-import makeReport from './MakeReport'
+import { makeFormReport, makeReviewReport } from './MakeReport'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 function resize () {
   this.style.height = 'auto' // shrink
@@ -200,11 +204,11 @@ export default {
       e.target.style.removeProperty('border-color')
       e.target.style.removeProperty('background-color')
     },
-    validateAndExport () {
-      makeReport(this.questions)
-        .then(report => {
-          report.open()
-        })
+    validateAndExportForm () {
+      makeFormReport(this.questions).open()
+    },
+    validateAndExportReview () {
+      makeReviewReport(this.questions).open()
     }
   }
 }
@@ -232,6 +236,15 @@ label.question {
 }
 h2 {
   padding-top: 15px;
+}
+.export {
+  color: #696969;
+  box-shadow: #696969 0px 0px 1px 0px inset, #696969 0px 0px 1px 0px;
+  border: 1px solid #696969;
+  background-color: #F5F5F7;
+  border-radius: 15px;
+  margin: 0 auto;
+  padding-bottom: 20px;
 }
 .section {
   text-align: left;

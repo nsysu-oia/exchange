@@ -1,21 +1,24 @@
 import pdfMake from 'pdfmake/build/pdfmake'
-const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost:8080'
+const backendHost = (process.env.VUE_APP_BACKEND_HOST)
+  ? 'https://' + process.env.VUE_APP_BACKEND_HOST
+  : 'http://localhost:8080'
 
-export default async function (questions) {
-  const cover = [{
+function makeCover (subtitle, nameChi, studentID, fillDate) {
+  return [{
     stack: [
       {
         stack: [
           '國立中山大學',
-          '出國交換計畫返國報告書'
+          '出國交換計畫返國報告書',
+          subtitle
         ],
         fontSize: 30,
         margin: [0, 180, 0, 0]
       },
       {
         stack: [
-          questions.基本資料.nameChi.value,
-          questions.基本資料.studentID.value
+          nameChi,
+          studentID
         ],
         fontSize: 18,
         margin: [0, 20, 0, 0]
@@ -23,7 +26,7 @@ export default async function (questions) {
       {
         // regex
         // yyyy-mm-dd to yyyy年m?m月d?d日
-        text: questions.基本資料.fillDate.value
+        text: fillDate
           .replace(/-0/g, '-')
           .replace(/-/, '年')
           .replace(/-/, '月')
@@ -40,10 +43,31 @@ export default async function (questions) {
     ],
     alignment: 'center'
   }]
+}
+
+export function makeFormReport (questions) {
+  const cover = makeCover(
+    '研修資訊',
+    questions.基本資料.nameChi.value,
+    questions.基本資料.studentID.value,
+    questions.基本資料.fillDate.value
+  )
+
+  const toc = [{
+    toc: {
+      id: 'sectionToc',
+      title: { text: '目錄', style: 'section' }
+    }
+  }]
 
   const table = []
-  for (const section in questions) {
-    table.push({ text: section, style: 'section' })
+  Object.keys(questions).slice(0, -1).forEach(section => {
+    table.push({
+      text: section,
+      style: 'section',
+      tocItem: 'sectionToc',
+      pageBreak: 'before'
+    })
     const rows = []
     for (const identifier in questions[section]) {
       const question = questions[section][identifier]
@@ -53,19 +77,31 @@ export default async function (questions) {
       ])
     }
     table.push({
-      layout: 'noBorders',
+      layout: {
+        hLineColor: () => {
+          return '#E6E6E6'
+        },
+        vLineWidth: () => {
+          return 0
+        }
+      },
       table: {
         widths: [200, '*'],
         body: rows
       }
     })
-  }
+  })
 
   let content = []
   content = content.concat(cover)
+  content = content.concat(toc)
   content = content.concat(table)
 
   const docDefinition = {
+    info: {
+      title: '國立中山大學出國交換計畫返國報告書',
+      author: questions.基本資料.nameChi.value
+    },
     content: content,
     footer: function (currentPage) {
       return {
@@ -79,21 +115,93 @@ export default async function (questions) {
       font: 'timesNewRomanAndKai'
     },
     images: {
-      logo: 'http://' + backendHost + require('@/assets/logos/logo-mobile.png')
+      logo: backendHost + require('@/assets/logos/logo-mobile.png')
     },
     styles: {
       section: {
-        fontSize: 20
+        fontSize: 20,
+        margin: [0, 20]
       },
       cell: {
-        margin: 10
+        margin: 5
       }
     }
   }
 
   const fonts = {
     timesNewRomanAndKai: {
-      normal: 'http://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
+      normal: 'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
+    }
+  }
+
+  return pdfMake.createPdf(docDefinition, null, fonts)
+}
+
+export function makeReviewReport (questions) {
+  const cover = makeCover(
+    '心得感想',
+    questions.基本資料.nameChi.value,
+    questions.基本資料.studentID.value,
+    questions.基本資料.fillDate.value
+  )
+
+  const toc = [{
+    toc: {
+      id: 'sectionToc',
+      title: { text: '目錄', style: 'section' }
+    }
+  }]
+
+  const rows = []
+  for (const identifier in questions.心得報告) {
+    const question = questions.心得報告[identifier]
+    rows.push([
+      {
+        text: question.label,
+        style: 'section',
+        tocItem: 'sectionToc',
+        pageBreak: 'before'
+      },
+      { text: question.value }
+    ])
+  }
+
+  let content = []
+  content = content.concat(cover)
+  content = content.concat(toc)
+  content = content.concat(rows)
+
+  const docDefinition = {
+    info: {
+      title: '國立中山大學出國交換計畫返國報告書',
+      author: questions.基本資料.nameChi.value
+    },
+    content: content,
+    footer: function (currentPage) {
+      return {
+        text: (currentPage === 1) ? '' : currentPage.toString(),
+        margin: [0, 10, 30, 0],
+        fontSize: 10,
+        alignment: 'right'
+      }
+    },
+    defaultStyle: {
+      font: 'timesNewRomanAndKai'
+    },
+    images: {
+      logo: backendHost + require('@/assets/logos/logo-mobile.png')
+    },
+    styles: {
+      section: {
+        fontSize: 20,
+        margin: [0, 20]
+      }
+    }
+  }
+
+  const fonts = {
+    timesNewRomanAndKai: {
+      normal: 'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
     }
   }
 
