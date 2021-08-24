@@ -9,69 +9,71 @@
     <div class="section" v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex" :style="{ 'width': sectionWidth }">
       <h2>{{ section }}</h2>
       <div v-for="(question, identifier, questionIndex) in questions[section]" :key="questionIndex">
-        <template v-if="checkDependency(question.dependency, question.dependencyValue)">
-          <label class="question" :for="section+';'+identifier">{{ question.label }}</label>
-          <!-- select -->
-          <select
-            v-if="question.type === 'select'"
-            :id="section+';'+identifier"
-            v-model="question.value"
-            @change="syncDB"
-            @blur="validate"
-            @input="removeMark"
-          >
-            <option disabled value="">請選擇</option>
-            <option
-              v-for="(option, optionIndex) in question.options"
-              :key="optionIndex"
-            >{{ option }}</option>
-          </select>
-          <!-- textarea -->
-          <textarea
-            class="js-autoresize"
-            v-else-if="question.type === 'textarea'"
-            :placeholder="question.required ? '必填' : null"
-            :id="section+';'+identifier" v-model.lazy="question.value"
-            @change="syncDB"
-            @blur="validate"
-            @input="removeMark"
-          />
-          <!-- checkbox -->
-          <div v-else-if="question.type === 'checkbox'">
-            <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
-              <input
-                type="checkbox"
-                :id="section+';'+identifier+';'+option"
-                :value="option"
-                v-model="question.value"
-                @change="syncDB"
-                style="width: initial;"
-              />
-              <label :for="section+';'+identifier+';'+option">{{ option }}</label>
-              <input
-                v-if="option==='其他' && question.value.includes(option)"
-                type=text
-                v-model.lazy="question.otherDetail"
-                :id="section+';'+identifier+';otherDetail'"
-                @change="otherDetailSyncDB"
-              />
+        <transition @before-enter="collapse" @leave="collapseRev" :css="false">
+          <div v-if="checkDependency(question.dependency, question.dependencyValue)">
+            <label class="question" :for="section+';'+identifier">{{ question.label }}</label>
+            <!-- select -->
+            <select
+              v-if="question.type === 'select'"
+              :id="section+';'+identifier"
+              v-model="question.value"
+              @change="syncDB"
+              @blur="validate"
+              @input="removeMark"
+            >
+              <option disabled value="">請選擇</option>
+              <option
+                v-for="(option, optionIndex) in question.options"
+                :key="optionIndex"
+              >{{ option }}</option>
+            </select>
+            <!-- textarea -->
+            <textarea
+              class="js-autoresize"
+              v-else-if="question.type === 'textarea'"
+              :placeholder="question.required ? '必填' : null"
+              :id="section+';'+identifier" v-model.lazy="question.value"
+              @change="syncDB"
+              @blur="validate"
+              @input="removeMark"
+            />
+            <!-- checkbox -->
+            <div v-else-if="question.type === 'checkbox'">
+              <div v-for="(option, optionIndex) in question.options" :key="optionIndex">
+                <input
+                  type="checkbox"
+                  :id="section+';'+identifier+';'+option"
+                  :value="option"
+                  v-model="question.value"
+                  @change="syncDB"
+                  style="width: initial;"
+                />
+                <label :for="section+';'+identifier+';'+option">{{ option }}</label>
+                <input
+                  v-if="option==='其他' && question.value.includes(option)"
+                  type=text
+                  v-model.lazy="question.otherDetail"
+                  :id="section+';'+identifier+';otherDetail'"
+                  @change="otherDetailSyncDB"
+                />
+              </div>
             </div>
+            <!-- input -->
+            <input
+              v-else
+              :placeholder="question.required ? '必填' : null"
+              :type="question.type"
+              :id="section+';'+identifier"
+              v-model.lazy="question.value"
+              :readonly="question.readonly"
+              @change="syncDB"
+              @blur="validate"
+              @input="removeMark"
+              v-on="{ keypress: (question.type === 'number') ? isNumber : null }"
+            />
+            <!-- v-on syntax above: https://github.com/vuejs/vue/issues/7349#issuecomment-354937350 -->
           </div>
-          <!-- input -->
-          <input
-            v-else
-            :placeholder="question.required ? '必填' : null"
-            :type="question.type"
-            :id="section+';'+identifier"
-            v-model.lazy="question.value"
-            :readonly="question.readonly"
-            @change="syncDB"
-            @blur="validate"
-            @input="removeMark"
-            v-on="{ keypress: (question.type === 'number') ? isNumber : null }"
-          />
-          <!-- v-on syntax above: https://github.com/vuejs/vue/issues/7349#issuecomment-354937350 -->
-        </template>
+        </transition>
       </div>
     </div>
   </div>
@@ -80,6 +82,7 @@
 
 <script>
 import axios from 'axios'
+import gsap from 'gsap'
 import { makeFormReport, makeReviewReport } from './MakeReport'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 function resize () {
@@ -141,6 +144,29 @@ export default {
     }
   },
   methods: {
+    collapse (el) {
+      gsap.fromTo(el, {
+        scale: 0,
+        opacity: 0
+      }, {
+        scale: 1,
+        opacity: 1,
+        ease: 'back',
+        transformOrigin: '0% 50%'
+      })
+    },
+    collapseRev (el, done) {
+      gsap.fromTo(el, {
+        scale: 1,
+        opacity: 1
+      }, {
+        scale: 0,
+        opacity: 0,
+        ease: 'back',
+        transformOrigin: '0% 50%',
+        onComplete: done
+      })
+    },
     checkDependency (dependency, dependencyValue) {
       if (dependencyValue === undefined) {
         return true

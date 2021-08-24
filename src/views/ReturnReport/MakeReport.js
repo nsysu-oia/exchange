@@ -71,10 +71,13 @@ export function makeFormReport (questions) {
     const rows = []
     for (const identifier in questions[section]) {
       const question = questions[section][identifier]
-      rows.push([
-        { stack: [question.label], style: 'cell' },
-        { stack: [question.value], style: 'cell' }
-      ])
+      if (question.dependencyValue === undefined ||
+        questions[question.dependency[0]][question.dependency[1]].value === question.dependencyValue) {
+        rows.push([
+          { stack: [question.label], style: 'cell' },
+          { stack: [question.value], style: 'cell' }
+        ])
+      }
     }
     table.push({
       layout: {
