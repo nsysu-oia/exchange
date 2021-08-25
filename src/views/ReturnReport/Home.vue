@@ -231,7 +231,31 @@ export default {
       e.target.style.removeProperty('background-color')
     },
     validateAndExportForm () {
-      makeFormReport(this.questions).open()
+      const report = makeFormReport(this.questions)
+      report.getBlob(blob => {
+        const open = new Promise((resolve, reject) => {
+          try {
+            const urlCreator = window.URL || window.webkitURL
+            const pdfUrl = urlCreator.createObjectURL(blob)
+            window.open(pdfUrl, '_blank')
+            resolve()
+          } catch (e) {
+            alert('預覽PDF失敗')
+            reject(e)
+          }
+        })
+        open.then(() => { console.log('opened') })
+
+        // upload to syno
+        // blob can be sent inside FormData
+        const data = new FormData()
+        data.append('file', blob)
+        axios
+          .post('//' + backendHost + ':3000/return-report/upload', data)
+          .then(res => {
+            console.log(res.data)
+          })
+      })
     },
     validateAndExportReview () {
       makeReviewReport(this.questions).open()
