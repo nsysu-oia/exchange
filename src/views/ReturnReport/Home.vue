@@ -247,13 +247,13 @@ export default {
         open.then(() => { console.log('opened') })
 
         // upload to syno
-        // blob can be sent inside FormData
-        const data = new FormData()
-        data.append('file', blob)
+        const formData = new FormData()
+        formData.append('file', blob)
+
         axios
-          .post('//' + backendHost + ':3000/return-report/upload', data)
-          .then(res => {
-            console.log(res.data)
+          .post('//' + backendHost + ':3000/return-report/upload', formData)
+          .catch(e => {
+            console.log(e)
           })
       })
     },
