@@ -148,52 +148,42 @@
     label: 簽證費
     value: 
     type: number
-    required: true
   costTicket:
     label: 機票費
     value: 
     type: number
-    required: true
   costInsurance:
     label: 保險費
     value: 
     type: number
-    required: true
   costHousing:
     label: 住宿費
     value: 
     type: number
-    required: true
   costLiving:
     label: 生活費
     value: 
     type: number
-    required: true
   costCommuting:
     label: 交通費
     value: 
     type: number
-    required: true
   costTravel:
     label: 旅遊費
     value: 
     type: number
-    required: true
   costTextbook:
     label: 書籍費
     value: 
     type: number
-    required: true
   costLanguageSchool:
     label: 語言學校費用
     value: 
     type: number
-    required: true
   costOther:
     label: 其他費用
     value: 
     type: number
-    required: true
   costTotal:
     label: 總金額
     value: 
@@ -210,7 +200,6 @@
       - costTextbook
       - costLanguageSchool
       - costOther
-    required: true
   householdIncome:
     label: 請問您的家庭年收入為？
     value: 

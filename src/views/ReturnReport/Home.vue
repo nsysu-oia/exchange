@@ -2,8 +2,8 @@
   <h1>返國報告書</h1>
   <div class="export" :style="{ 'width': sectionWidth }">
     <p><b>預覽報告書並提交至國際處</b></p>
-    <button type="button" class="button" @click="validateAndExportForm">研修資訊</button>
-    <button type="button" class="button" @click="validateAndExportReview">心得感想</button>
+    <button type="button" class="button" @click="validateAndExport('研修資訊.pdf')">研修資訊</button>
+    <button type="button" class="button" @click="validateAndExport('心得感想.pdf')">心得感想</button>
   </div>
   <div v-if="!!questions" ref="contents">
     <div class="section" v-for="(section, sectionIndex) in Object.keys(questions)" :key="sectionIndex" :style="{ 'width': sectionWidth }">
@@ -192,9 +192,10 @@ export default {
 
       if (e.target.type === 'number' && ids[1].substring(0, 4) === 'cost') {
         if (!e.target.value) { // empty string
-          this.questions[ids[0]][ids[1]].value = '0'
+          this.questions[ids[0]][ids[1]].value = values[ids[1]] = '0'
         }
-        // an exception for handling costTotal
+        // an exception action for handling costTotal
+        // summing the cost
         let costTotal = 0
         for (const index in this.questions[ids[0]].costTotal.isSumOf) {
           const costItem = this.questions[ids[0]].costTotal.isSumOf[index]
@@ -230,35 +231,66 @@ export default {
       e.target.style.removeProperty('border-color')
       e.target.style.removeProperty('background-color')
     },
-    validateAndExportForm () {
-      const report = makeFormReport(this.questions)
-      report.getBlob(blob => {
-        const open = new Promise((resolve, reject) => {
-          try {
-            const urlCreator = window.URL || window.webkitURL
-            const pdfUrl = urlCreator.createObjectURL(blob)
-            window.open(pdfUrl, '_blank')
-            resolve()
-          } catch (e) {
-            alert('預覽PDF失敗')
-            reject(e)
+    validateAndExport (filename) {
+      // validate
+      for (const sectionIdx of Object.keys(this.questions).slice(
+        (filename === '研修資訊.pdf') ? 0 : -1,
+        (filename === '研修資訊.pdf') ? -1 : this.questions.length
+      )) {
+        for (const questionIdx in this.questions[sectionIdx]) {
+          const question = this.questions[sectionIdx][questionIdx]
+          if (
+            this.checkDependency(question.dependency, question.dependencyValue) &&
+            question.required &&
+            !question.value
+          ) {
+            const el = document.getElementById(sectionIdx + ';' + questionIdx)
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            el.style['border-color'] = '#e30000'
+            el.style['background-color'] = '#fff2f4'
+            return
           }
-        })
-        open.then(() => { console.log('opened') })
+        }
+      }
 
-        // upload to syno
+      // validated
+      const openInNewWin = async (blob) => {
+        try {
+          const urlCreator = window.URL || window.webkitURL
+          const pdfUrl = urlCreator.createObjectURL(blob)
+          window.open(pdfUrl, '_blank')
+        } catch (e) {
+          alert('預覽PDF失敗')
+        }
+      }
+      const uploadToSyno = (file) => {
         const formData = new FormData()
-        formData.append('file', blob)
+        formData.append(
+          'path',
+          'ernie-test' + '/' +
+          this.questions.基本資料.semester.value.substring(0, 5) + '/' +
+          this.questions.基本資料.countryChi.value + '_' +
+          this.questions.基本資料.universityChi.value + '_' +
+          this.questions.基本資料.nameChi.value
+        )
+        formData.append('filename', filename)
+        formData.append('file', file)
 
         axios
           .post('//' + backendHost + ':3000/return-report/upload', formData)
           .catch(e => {
             console.log(e)
           })
+      }
+
+      const report = (filename === '研修資訊.pdf')
+        ? makeFormReport(this.questions)
+        : makeReviewReport(this.questions)
+
+      report.getBlob(blob => {
+        openInNewWin(blob)
+        uploadToSyno(blob)
       })
-    },
-    validateAndExportReview () {
-      makeReviewReport(this.questions).open()
     }
   }
 }
