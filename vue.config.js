@@ -3,7 +3,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].title = '國立中山大學出國交換計畫平台'
+        args[0].title = '出國交換計畫單一入口'
         return args
       })
 

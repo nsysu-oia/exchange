@@ -3,36 +3,38 @@ const backendHost = (process.env.VUE_APP_BACKEND_HOST)
   ? 'https://' + process.env.VUE_APP_BACKEND_HOST
   : 'http://localhost:8080'
 
-function makeCover (subtitle, nameChi, studentID, fillDate) {
+function makeCover (subtitle, info) {
   return [{
     stack: [
       {
-        stack: [
-          '國立中山大學',
-          '出國交換計畫返國報告書',
-          subtitle
-        ],
+        text: '國立中山大學出國交換計畫',
         fontSize: 30,
-        margin: [0, 180, 0, 0]
+        margin: [0, 100, 0, 0]
+      },
+      {
+        text: '返國報告書' + '（' + subtitle + '）',
+        fontSize: 30,
+        margin: [0, 40, 0, 0]
       },
       {
         stack: [
-          nameChi,
-          studentID
+          info.countryChi.value + '／' + info.universityChi.value,
+          info.collegeChi.value + info.departmentChi.value,
+          info.nameChi.value + ' ' + info.studentID.value
         ],
-        fontSize: 18,
-        margin: [0, 20, 0, 0]
+        fontSize: 24,
+        margin: [0, 40, 0, 0]
       },
       {
         // regex
         // yyyy-mm-dd to yyyy年m?m月d?d日
-        text: fillDate
+        text: info.fillDate.value
           .replace(/-0/g, '-')
           .replace(/-/, '年')
           .replace(/-/, '月')
           .replace(/$/, '日'),
-        fontSize: 18,
-        margin: [0, 20, 0, 0]
+        fontSize: 24,
+        margin: [0, 40, 0, 0]
       },
       {
         image: 'logo',
@@ -48,15 +50,14 @@ function makeCover (subtitle, nameChi, studentID, fillDate) {
 export function makeFormReport (questions) {
   const cover = makeCover(
     '研修資訊',
-    questions.基本資料.nameChi.value,
-    questions.基本資料.studentID.value,
-    questions.基本資料.fillDate.value
+    questions.基本資料
   )
 
   const toc = [{
     toc: {
       id: 'sectionToc',
-      title: { text: '目錄', style: 'section' }
+      title: { text: '目錄', style: 'section' },
+      numberStyle: { fontSize: 16 }
     }
   }]
 
@@ -66,6 +67,7 @@ export function makeFormReport (questions) {
       text: section,
       style: 'section',
       tocItem: 'sectionToc',
+      tocStyle: { fontSize: 16 },
       pageBreak: 'before'
     })
     const rows = []
@@ -143,15 +145,14 @@ export function makeFormReport (questions) {
 export function makeReviewReport (questions) {
   const cover = makeCover(
     '心得感想',
-    questions.基本資料.nameChi.value,
-    questions.基本資料.studentID.value,
-    questions.基本資料.fillDate.value
+    questions.基本資料
   )
 
   const toc = [{
     toc: {
       id: 'sectionToc',
-      title: { text: '目錄', style: 'section' }
+      title: { text: '目錄', style: 'section' },
+      numberStyle: { fontSize: 16 }
     }
   }]
 
@@ -163,6 +164,7 @@ export function makeReviewReport (questions) {
         text: question.label,
         style: 'section',
         tocItem: 'sectionToc',
+        tocStyle: { fontSize: 16 },
         pageBreak: 'before'
       },
       { text: question.value }

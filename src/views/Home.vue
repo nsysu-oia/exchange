@@ -1,4 +1,8 @@
 <template>
+  <h1>
+    國立中山大學<br />
+    學生出國交換計畫<template v-if="$store.state.windowSize === 'xs'"><br /></template>各階段應完成項目
+  </h1>
   <div
     class="grid-wrapper"
     :style="(mobileDevice) ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"

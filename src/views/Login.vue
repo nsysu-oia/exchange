@@ -1,8 +1,7 @@
 <template>
   <div class="bg">
     <div class="login-box">
-      <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
-      <div class="title">出國交換計畫平台</div>
+      <div class="title">國立中山大學<br />學生出國交換計畫單一入口</div>
       <div class="form">
         <input
           v-model="studentID"
@@ -35,7 +34,8 @@
           <button :disabled="!password" @click="ssoAuth" />
         </div>
       </transition>
-      <p v-if="!!errMsg">{{ errMsg }}</p>
+      <p>&nbsp;{{ errMsg }}&nbsp;</p>
+      <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
     </div>
   </div>
 </template>
