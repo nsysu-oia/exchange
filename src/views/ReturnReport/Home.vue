@@ -254,11 +254,10 @@ export default {
       }
 
       // validated
-      const openInNewWin = async (blob) => {
+      const openInNewWin = async (blob, win) => {
         try {
           const urlCreator = window.URL || window.webkitURL
-          const pdfUrl = urlCreator.createObjectURL(blob)
-          window.open(pdfUrl, '_blank')
+          win.location.href = urlCreator.createObjectURL(blob)
         } catch (e) {
           alert('預覽PDF失敗')
         }
@@ -278,17 +277,23 @@ export default {
 
         axios
           .post('//' + backendHost + ':3000/return-report/upload', formData)
-          .catch(e => {
-            console.log(e)
-          })
+          // .catch(e => {
+          //   console.log(e)
+          // })
       }
 
+      // make a deep copy of questions to prevent modifications
+      const questions = JSON.parse(JSON.stringify(this.questions))
+
       const report = (filename === '研修資訊.pdf')
-        ? makeFormReport(this.questions)
-        : makeReviewReport(this.questions)
+        ? makeFormReport(questions)
+        : makeReviewReport(questions)
+
+      // immediately open new window after button click to prevent popup blocker
+      const win = window.open('', '_blank')
 
       report.getBlob(blob => {
-        openInNewWin(blob)
+        openInNewWin(blob, win)
         uploadToSyno(blob)
       })
     }
