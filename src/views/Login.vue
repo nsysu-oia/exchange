@@ -122,7 +122,7 @@ export default {
           this.$nextTick(() => { this.$refs.password.focus() })
         })
         .catch(err => {
-          if (err.response.status === 400) {
+          if (err.response && err.response.status === 400) {
             this.errMsg = '您並未申請學生交換計畫'
             this.sidVerified = false
           }
@@ -134,9 +134,17 @@ export default {
           studentID: this.studentID,
           password: this.password
         })
-        .then(() => { this.$router.push({ name: 'Home' }) })
+        .then(() => {
+          this.$router.push({
+            // TODO: The return report system is published first
+            //       This prevent these users access the under-constructing homepage.
+            name: this.$store.state.user.returnReportOnly
+              ? 'ReturnReport'
+              : 'Home'
+          })
+        })
         .catch(err => {
-          if (err.response.status === 400) {
+          if (err.response && err.response.status === 400) {
             this.errMsg = '帳號或密碼錯誤'
           }
         })
