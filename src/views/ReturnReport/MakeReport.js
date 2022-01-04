@@ -23,7 +23,7 @@ function makeCover (subtitle, info) {
           info.nameChi.value + ' ' + info.studentID.value
         ],
         fontSize: 24,
-        margin: [0, 40, 0, 0]
+        margin: [0, 90, 0, 0]
       },
       {
         // regex
@@ -34,12 +34,12 @@ function makeCover (subtitle, info) {
           .replace(/-/, '月')
           .replace(/$/, '日'),
         fontSize: 24,
-        margin: [0, 40, 0, 0]
+        margin: [0, 250, 0, 0]
       },
       {
         image: 'logo',
         width: 200,
-        margin: [0, 70, 0, 0],
+        margin: [0, 20, 0, 0],
         pageBreak: 'after'
       }
     ],
