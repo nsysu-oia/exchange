@@ -31,12 +31,18 @@ const router = createRouter({
 
 router.beforeEach((to, _, next) => {
   // redirect to login page if user is not logged in and trying to access a restricted page
-  const publicPages = ['/login']
-  const authRequired = !publicPages.includes(to.path)
-  const loggedIn = localStorage.getItem('user')
+  const publicPages = ['Login']
+  const authRequired = !publicPages.includes(to.name)
+  const user = localStorage.getItem('user')
 
-  if (authRequired && !loggedIn) {
-    return next('/login')
+  if (authRequired && !user) {
+    return next({ name: 'Login' })
+  }
+
+  // TODO: The return report system is published first
+  //       This prevent these users access the under-constructing homepage.
+  if (to.name !== 'ReturnReport' && user && JSON.parse(user).returnReportOnly) {
+    return next({ name: 'ReturnReport' })
   }
 
   next()

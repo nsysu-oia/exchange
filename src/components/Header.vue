@@ -42,13 +42,7 @@ export default {
   },
   methods: {
     pushHome () {
-      this.$router.push({
-        // TODO: The return report system is published first
-        //       This prevent these users access the under-constructing homepage.
-        name: this.$store.state.user.returnReportOnly
-          ? 'ReturnReport'
-          : 'Home'
-      })
+      this.$router.push({ name: 'Home' })
     },
     logout () {
       this.$store.dispatch('logout')

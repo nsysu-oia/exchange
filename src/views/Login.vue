@@ -135,13 +135,7 @@ export default {
           password: this.password
         })
         .then(() => {
-          this.$router.push({
-            // TODO: The return report system is published first
-            //       This prevent these users access the under-constructing homepage.
-            name: this.$store.state.user.returnReportOnly
-              ? 'ReturnReport'
-              : 'Home'
-          })
+          this.$router.push({ name: 'Home' })
         })
         .catch(err => {
           if (err.response && err.response.status === 400) {

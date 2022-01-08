@@ -27,7 +27,7 @@ export default createStore({
   state: {
     windowWidth: window.innerWidth,
     windowSize: getWindowSize(window.innerWidth),
-    user: null,
+    user: localStorage.getItem('user'),
     sectionHeights: {
       note: 0,
       apply: 0,
@@ -45,8 +45,9 @@ export default createStore({
       localStorage.setItem('user', JSON.stringify(data))
       axios.defaults.headers.common.Authorization = `Bearer ${data.token}`
     },
-    CLR_USER () {
+    CLR_USER (state) {
       localStorage.removeItem('user')
+      state.user = null
       location.reload()
     }
   },
