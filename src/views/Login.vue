@@ -76,7 +76,11 @@ export default {
       }
     },
     pwBlurred () {
-      if (this.sidVerified) {
+      // the second condition has to be checked
+      // because after successfully logged in,
+      // this function will also be triggered
+      // but `this.$refs.password` doesn't exist anymore
+      if (this.sidVerified && this.$refs.password) {
         this.$refs.password.style['border-top-color'] = gray
       }
     },
