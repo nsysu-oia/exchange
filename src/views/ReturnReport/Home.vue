@@ -93,7 +93,8 @@ export default {
   name: 'Home',
   data () {
     return {
-      questions: require('@/assets/contents/return-report.yaml')
+      questions: require('@/assets/contents/return-report.yaml'),
+      stages: require('@/assets/contents/stages.yaml')
     }
   },
   created () {
@@ -266,7 +267,7 @@ export default {
         const formData = new FormData()
         formData.append(
           'path',
-          'ernie-test' + '/' +
+          this.stages[4].applies[0].path + '/' +
           this.questions.基本資料.semester.value.substring(0, 5) + '/' +
           this.questions.基本資料.countryChi.value + '_' +
           this.questions.基本資料.universityChi.value + '_' +
