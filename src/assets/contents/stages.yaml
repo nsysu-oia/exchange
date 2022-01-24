@@ -11,6 +11,7 @@
       done: false
   uploads: []
   downloads: []
+  forScholarship: {}
 - title: 校外提名申請階段
   style:
     backgroundColor: '#98c1d9'
@@ -24,6 +25,7 @@
   downloads:
     - title: 家長同意書擔保書及研修獎助切結書
     - title: 棄權聲明書(期限外)
+  forScholarship: {}
 - title: 出國前一個月
   style:
     backgroundColor: '#aaabd3'
@@ -33,20 +35,24 @@
   applies:
       title: 登記出國/返國日期(隨時可更改)
       done: false
-  uploads:
-    - title: 簽證
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/04-簽證
-    - title: 護照
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/05-護照
-    - title: 存摺封面
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/06-存摺封面
-    - title: 電子機票(隨時可更改)
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/07-電子機票
+  uploads: []
   downloads:
     - title: 役男出境申請表
     - title: 出境申請表
     - title: 學生出國預備選修課程表
     - title: 行前說明會簡報檔
+  forScholarship:
+    applies: []
+    uploads:
+      - title: 簽證
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/04-簽證
+      - title: 護照
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/05-護照
+      - title: 存摺封面
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/06-存摺封面
+      - title: 電子機票(隨時可更改)
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/07-電子機票
+    downloads: []
 - title: 出國期間
   style:
     backgroundColor: '#eebfcd'
@@ -56,14 +62,18 @@
   applies:
     - title: 安全回報
       done: false
-    - title: 國外選課表
-      done: false
-    - title: 期中報告(出國一學年者，於第一學期結束繳交)
-      done: false
-  uploads:
-    - title: 出國登機證(兩週內)
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/11-出國登機證
+  uploads: []
   downloads: []
+  forScholarship:
+    applies:
+      - title: 國外選課表
+        done: false
+      - title: 期中報告(出國一學年者，於第一學期結束繳交)
+        done: false
+    uploads:
+      - title: 出國登機證(兩週內)
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/11-出國登機證
+    downloads: []
 - title: 返國後兩個月
   style:
     backgroundColor: '#ecb8a5'
@@ -76,14 +86,18 @@
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/12-返國報告書
     - title: 交換證明書申請表(有需要者可填寫)
       done: false
-  uploads:
-    - title: 返國登機證(兩週內)
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/13-返國登機證
-    - title: 交換成績單(每學期應至少通過兩門課程)
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/14-交換成績單
-    - title: 交換生活照片
-      path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/15-交換生活照片
+  uploads: []
   downloads:
     - title: 抵免申請單
     - title: 返校手續單
+  forScholarship:
+    applies: []
+    uploads:
+      - title: 返國登機證(兩週內)
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/13-返國登機證
+      - title: 交換成績單(每學期應至少通過兩門課程)
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/14-交換成績單
+      - title: 交換生活照片
+        path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/15-交換生活照片
+    downloads: []
 ...

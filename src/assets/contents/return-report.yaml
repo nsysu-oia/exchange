@@ -106,13 +106,11 @@
     label: 中文交換/研修系所
     value: 
     type: text
-    readonly: true
     required: true
   exchangeDepartmentEng: 
     label: 英文交換/研修系所
     value: 
     type: text
-    readonly: true
     required: true
   semester: 
     label: 交換/研修期間

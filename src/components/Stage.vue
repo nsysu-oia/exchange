@@ -18,7 +18,7 @@
   </div>
 
   <div :style="sectionStyle(3, stage.style)">
-    <div v-if="!mobileDevice || !!stage.applies.length" class="section-title" :style="stage.style">申請或登錄</div>
+    <!--<div v-if="!mobileDevice || !!stage.applies.length" class="section-title" :style="stage.style">申請或登錄</div>-->
     <ul v-if="stage.applies.length">
       <li
         v-for="(apply, index) in stage.applies"
@@ -29,10 +29,6 @@
         <template v-else>{{ apply.title }}</template>
       </li>
     </ul>
-  </div>
-
-  <div :style="sectionStyle(4, stage.style)">
-    <div v-if="!mobileDevice || !!stage.uploads.length" class="section-title" :style="stage.style">上傳檔案區</div>
     <ul v-if="stage.uploads.length">
       <li
         v-for="(upload, index) in stage.uploads"
@@ -40,19 +36,46 @@
         :style="{ listStyle: 'url(' + icons[2] + ')' }"
       >{{ upload.title }}</li>
     </ul>
-  </div>
-
-  <div :style="sectionStyle(5, stage.style)">
-    <div v-if="!mobileDevice || !!stage.downloads.length" class="section-title" :style="stage.style">下載檔案區</div>
-    <ul>
-      <!-- we will need this ul on the mobile devices even if no downloads.
-           So we can present the bottom border-radius --->
+    <ul v-if="stage.downloads.length">
       <li
         v-for="(download, index) in stage.downloads"
         :key="index"
         :style="{ listStyle: 'url(' + icons[3] + ')' }"
       >{{ download.title }}</li>
     </ul>
+  </div>
+
+  <div :style="sectionStyle(4, stage.style)">
+    <div v-if="!mobileDevice || !!Object.keys(stage.forScholarship).length" class="section-title" :style="stage.style">獎助生專區</div>
+    <template v-if="!!Object.keys(stage.forScholarship).length">
+    <ul v-if="stage.forScholarship.applies.length">
+      <li
+        v-for="(apply, index) in stage.forScholarship.applies"
+        :key="index"
+        :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
+      >
+      <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
+        <template v-else>{{ apply.title }}</template>
+      </li>
+    </ul>
+    <ul v-if="stage.forScholarship.uploads.length">
+      <li
+        v-for="(upload, index) in stage.forScholarship.uploads"
+        :key="index"
+        :style="{ listStyle: 'url(' + icons[2] + ')' }"
+      >{{ upload.title }}</li>
+    </ul>
+    <ul v-if="stage.forScholarship.downloads.length">
+      <li
+        v-for="(download, index) in stage.forScholarship.downloads"
+        :key="index"
+        :style="{ listStyle: 'url(' + icons[3] + ')' }"
+      >{{ download.title }}</li>
+    </ul>
+    </template>
+    <ul v-else></ul>
+    <!-- we will need this ul on the mobile devices even if no forScholarship.
+         So we can present the bottom border-radius --->
   </div>
 </template>
 
@@ -99,7 +122,7 @@ export default {
         style.borderLeft = '3px solid ' + stageStyle.backgroundColor
         style.borderRight = '3px solid ' + stageStyle.backgroundColor
       }
-      if (index === 5) {
+      if (index === 4) {
         style.borderRadius = '0 0 10px 10px'
         style.borderBottom = '3px solid ' + stageStyle.backgroundColor
       }
