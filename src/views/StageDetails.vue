@@ -33,9 +33,6 @@
 </template>
 
 <script>
-import axios from 'axios'
-const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
-
 export default {
   name: 'StageDetails',
   props: ['stageTitle'],
@@ -46,21 +43,7 @@ export default {
     }
   },
   created: function () {
-    // fetch UI content
-    const content = 'stages'
-    axios
-      .post('//' + backendHost + ':3000/content', { content })
-      .then(({ data }) => {
-        this.stage = data.find(stage => stage.title === this.stageTitle)
-        if (!this.stage) {
-          this.errMsg = 'Cannot find the stage: ' + this.stageTitle
-        }
-      })
-      .catch(err => {
-        if (err.response.status === 400) {
-          this.errMsg = 'Cannot fetch the content: ' + content
-        }
-      })
+    this.stage = require('@/assets/contents/stages.yaml').find(stage => stage.title === this.stageTitle)
   },
   computed: {
     mobileDevice () {

@@ -29,10 +29,8 @@
             apply.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
           )
         }"
-      ><span class="li">
-      <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
-        <template v-else>{{ apply.title }}</template>
-      </span></li>
+        @click="routerPush(apply.route)"
+      ><span>{{ apply.title }}</span></li>
     </ul>
     <ul v-if="stage.uploads.length">
       <li
@@ -44,14 +42,14 @@
             upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
           )
         }"
-      ><span class="li">{{ upload.title }}</span></li>
+      ><span>{{ upload.title }}</span></li>
     </ul>
     <ul v-if="stage.downloads.length">
       <li
         v-for="(download, index) in stage.downloads"
         :key="index"
         :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
-      ><span class="li">{{ download.title }}</span></li>
+      ><span>{{ download.title }}</span></li>
     </ul>
   </div>
 
@@ -68,7 +66,7 @@
             apply.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
           )
         }"
-      ><span class="li">
+      ><span>
       <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
         <template v-else>{{ apply.title }}</template>
       </span></li>
@@ -83,14 +81,14 @@
             upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
           )
         }"
-      ><span class="li">{{ upload.title }}</span></li>
+      ><span>{{ upload.title }}</span></li>
     </ul>
     <ul v-if="stage.forScholarship.downloads.length">
       <li
         v-for="(download, index) in stage.forScholarship.downloads"
         :key="index"
         :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
-      ><span class="li">{{ download.title }}</span></li>
+      ><span>{{ download.title }}</span></li>
     </ul>
     </template>
     <ul v-else></ul>
@@ -100,6 +98,7 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
   name: 'Stage',
   props: {
@@ -108,16 +107,12 @@ export default {
       required: true
     }
   },
+  /*
   data () {
     return {
-      icons: [
-        require('@/assets/icons/check-box-done.svg'),
-        require('@/assets/icons/check-box.svg'),
-        require('@/assets/icons/upload.svg'),
-        require('@/assets/icons/download.svg')
-      ]
     }
   },
+  */
   computed: {
     mobileDevice () {
       switch (this.$store.state.windowSize) {
@@ -154,7 +149,7 @@ export default {
     svgBullet (text, color) {
       const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="54" height="26">
-          <rect x="2" y="2" width="50" height="22" rx="10" ry="10" style="fill:white;stroke:${color};stroke-width:2;" />
+          <rect x="2" y="2" width="50" height="22" rx="11" ry="11" style="fill:white;stroke:${color};stroke-width:2;" />
           <text x="${24 - 5 * text.length}" y="17"
                 font-size="12"
                 font-family="Avenir, Helvetica, Arial, sans-serif"
@@ -163,6 +158,12 @@ export default {
         </svg>
       `
       return `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}')`
+    },
+    routerPush (name) {
+      if (!name) {
+        return
+      }
+      router.push({ name })
     }
   }
 }
@@ -176,17 +177,20 @@ a {
   height: 100%;
   color: inherit;
 }
-li span.li {
+li span {
   position: relative;
-  left: -8px;
   top: -6px;
 }
 li {
   text-align: left;
   padding: 5px;
-  margin-left: 25px;
   border-radius: 5px;
+  margin-right: 10px;
   transition: background-color .3s;
+}
+ul:not(.note) li {
+  margin-left: 30px;
+  cursor: pointer;
 }
 li:hover {
   background-color: #d6d6d6;
