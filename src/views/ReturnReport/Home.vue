@@ -277,7 +277,7 @@ export default {
         formData.append('file', file)
 
         axios
-          .post('//' + backendHost + ':3000/return-report/upload', formData)
+          .post('//' + backendHost + ':3000/syno/upload', formData)
           // .catch(e => {
           //   console.log(e)
           // })

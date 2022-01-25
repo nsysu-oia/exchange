@@ -67,8 +67,8 @@ export function makeFormReport (questions) {
       text: section,
       style: 'section',
       tocItem: 'sectionToc',
-      tocStyle: { fontSize: 16 },
-      pageBreak: 'before'
+      tocStyle: { fontSize: 16 }
+      // pageBreak: 'before'
     })
     const rows = []
     for (const identifier in questions[section]) {
@@ -164,8 +164,8 @@ export function makeReviewReport (questions) {
         text: question.label,
         style: 'section',
         tocItem: 'sectionToc',
-        tocStyle: { fontSize: 16 },
-        pageBreak: 'before'
+        tocStyle: { fontSize: 16 }
+        // pageBreak: 'before'
       },
       { text: question.value }
     ])

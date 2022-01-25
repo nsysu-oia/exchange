@@ -23,25 +23,35 @@
       <li
         v-for="(apply, index) in stage.applies"
         :key="index"
-        :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
-      >
+        :style="{ listStyle:
+          svgBullet(
+            apply.done ? '已填寫' : '填寫',
+            apply.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+          )
+        }"
+      ><span class="li">
       <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
         <template v-else>{{ apply.title }}</template>
-      </li>
+      </span></li>
     </ul>
     <ul v-if="stage.uploads.length">
       <li
         v-for="(upload, index) in stage.uploads"
         :key="index"
-        :style="{ listStyle: 'url(' + icons[2] + ')' }"
-      >{{ upload.title }}</li>
+        :style="{ listStyle:
+          svgBullet(
+            upload.done ? '已上傳' : '上傳',
+            upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+          )
+        }"
+      ><span class="li">{{ upload.title }}</span></li>
     </ul>
     <ul v-if="stage.downloads.length">
       <li
         v-for="(download, index) in stage.downloads"
         :key="index"
-        :style="{ listStyle: 'url(' + icons[3] + ')' }"
-      >{{ download.title }}</li>
+        :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
+      ><span class="li">{{ download.title }}</span></li>
     </ul>
   </div>
 
@@ -52,25 +62,35 @@
       <li
         v-for="(apply, index) in stage.forScholarship.applies"
         :key="index"
-        :style="{ listStyle: 'url(' + (apply.done ? icons[0] : icons[1]) + ')' }"
-      >
+        :style="{ listStyle:
+          svgBullet(
+            apply.done ? '已填寫' : '填寫',
+            apply.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+          )
+        }"
+      ><span class="li">
       <router-link v-if="!!apply.route" :to="{ name: apply.route }">{{ apply.title }}</router-link>
         <template v-else>{{ apply.title }}</template>
-      </li>
+      </span></li>
     </ul>
     <ul v-if="stage.forScholarship.uploads.length">
       <li
         v-for="(upload, index) in stage.forScholarship.uploads"
         :key="index"
-        :style="{ listStyle: 'url(' + icons[2] + ')' }"
-      >{{ upload.title }}</li>
+        :style="{ listStyle:
+          svgBullet(
+            upload.done ? '已上傳' : '上傳',
+            upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+          )
+        }"
+      ><span class="li">{{ upload.title }}</span></li>
     </ul>
     <ul v-if="stage.forScholarship.downloads.length">
       <li
         v-for="(download, index) in stage.forScholarship.downloads"
         :key="index"
-        :style="{ listStyle: 'url(' + icons[3] + ')' }"
-      >{{ download.title }}</li>
+        :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
+      ><span class="li">{{ download.title }}</span></li>
     </ul>
     </template>
     <ul v-else></ul>
@@ -130,6 +150,19 @@ export default {
         style.gridRow = index
       }
       return style
+    },
+    svgBullet (text, color) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="26">
+          <rect x="2" y="2" width="50" height="22" rx="10" ry="10" style="fill:white;stroke:${color};stroke-width:2;" />
+          <text x="${24 - 5 * text.length}" y="17"
+                font-size="12"
+                font-family="Avenir, Helvetica, Arial, sans-serif"
+                fill="${color}"
+          >${text}</text>
+        </svg>
+      `
+      return `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}')`
     }
   }
 }
@@ -143,10 +176,15 @@ a {
   height: 100%;
   color: inherit;
 }
+li span.li {
+  position: relative;
+  left: -8px;
+  top: -6px;
+}
 li {
   text-align: left;
   padding: 5px;
-  margin-right: 10px;
+  margin-left: 25px;
   border-radius: 5px;
   transition: background-color .3s;
 }
