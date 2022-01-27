@@ -153,20 +153,24 @@ export function makeReviewReport (questions) {
       id: 'sectionToc',
       title: { text: '目錄', style: 'section' },
       numberStyle: { fontSize: 16 }
-    }
+    },
+    pageBreak: 'after'
   }]
 
   const rows = []
   for (const identifier in questions.心得報告) {
     const question = questions.心得報告[identifier]
+    const config = {
+      text: question.label,
+      style: 'section',
+      tocItem: 'sectionToc',
+      tocStyle: { fontSize: 16 }
+    }
+    if (identifier === 'reportTestimonial' || identifier === 'reportEnglish') {
+      config.pageBreak = 'before'
+    }
     rows.push([
-      {
-        text: question.label,
-        style: 'section',
-        tocItem: 'sectionToc',
-        tocStyle: { fontSize: 16 }
-        // pageBreak: 'before'
-      },
+      config,
       { text: question.value }
     ])
   }

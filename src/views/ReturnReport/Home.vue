@@ -112,6 +112,14 @@ export default {
             }
           }
         }
+        // setup exceptions for reportScholarship and reportEnglish
+        if (this.questions.基本資料.scholarship.value === '無') {
+          delete this.questions.心得報告.reportScholarship
+        }
+        if (this.questions.基本資料.program.value === '中國') {
+          delete this.questions.心得報告.reportEnglish
+        }
+        // setup textarea auto resizing
         this.$nextTick(function () {
           const targets = this.$refs.contents.querySelectorAll('.js-autoresize')
           targets.forEach(target => {
