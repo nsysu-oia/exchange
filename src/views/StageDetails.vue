@@ -1,31 +1,31 @@
 <template>
   <p v-if="!!errMsg">{{ errMsg }}</p>
-  <template v-if="!!stage">
+  <template v-if="!!stage.general">
     <div>{{ stage.title }}</div>
-    <ul v-if="stage.notes.length">
+    <ul v-if="stage.notes">
       <li
         v-for="(note, index) in stage.notes"
         :key="index"
       >{{ note.title }}</li>
     </ul>
-    <div v-if="!mobileDevice || stage.applies.length">申請或登錄</div>
-    <ul :v-if="stage.applies.length">
+    <div v-if="!mobileDevice || stage.general.applies">申請或登錄</div>
+    <ul :v-if="stage.general.applies">
       <li
-        v-for="(apply, index) in stage.applies"
+        v-for="(apply, index) in stage.general.applies"
         :key="index"
       >{{ apply.title }}</li>
     </ul>
-    <div v-if="!mobileDevice || stage.uploads.length">上傳檔案區</div>
-    <ul :v-if="stage.uploads.length">
+    <div v-if="!mobileDevice || stage.general.uploads">上傳檔案區</div>
+    <ul :v-if="stage.general.uploads">
       <li
-        v-for="(upload, index) in stage.uploads"
+        v-for="(upload, index) in stage.general.uploads"
         :key="index"
       >{{ upload.title }}</li>
     </ul>
-    <div v-if="!mobileDevice || stage.downloads.length">下載檔案區</div>
-    <ul :v-if="stage.downloads.length">
+    <div v-if="!mobileDevice || stage.general.downloads">下載檔案區</div>
+    <ul :v-if="stage.general.downloads">
       <li
-        v-for="(download, index) in stage.downloads"
+        v-for="(download, index) in stage.general.downloads"
         :key="index"
       >{{ download.title }}</li>
     </ul>

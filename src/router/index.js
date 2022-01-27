@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import $store from '@/store'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 
@@ -33,16 +34,27 @@ router.beforeEach((to, _, next) => {
   // redirect to login page if user is not logged in and trying to access a restricted page
   const publicPages = ['Login']
   const authRequired = !publicPages.includes(to.name)
-  const user = localStorage.getItem('user')
 
-  if (authRequired && !user) {
-    return next({ name: 'Login' })
-  }
+  if (authRequired) {
+    const user = $store.state.user
+    if (!user) {
+      return next({ name: 'Login' })
+    }
 
-  // TODO: The return report system is published first
-  //       This prevent these users access the under-constructing homepage.
-  if (to.name !== 'ReturnReport' && user && JSON.parse(user).returnReportOnly) {
-    return next({ name: 'ReturnReport' })
+    // expiration check
+    if (!user.expireTimestamp || user.expireTimestamp < Date.now()) {
+      $store.commit('CLR_USER')
+      return next({ name: 'Login' })
+    }
+    // renew timestamp
+    user.expireTimestamp = Date.now() + parseInt(process.env.VUE_APP_SESSION_DURATION || '100000000000000')
+    $store.commit('SET_USER', user)
+
+    // TODO: The return report system is published first
+    //       This prevent these users access the under-constructing homepage.
+    if (to.name !== 'ReturnReport' && user && user.returnReportOnly) {
+      return next({ name: 'ReturnReport' })
+    }
   }
 
   next()

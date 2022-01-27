@@ -27,13 +27,7 @@ export default createStore({
   state: {
     windowWidth: window.innerWidth,
     windowSize: getWindowSize(window.innerWidth),
-    user: localStorage.getItem('user'),
-    sectionHeights: {
-      note: 0,
-      apply: 0,
-      upload: 0,
-      download: 0
-    }
+    user: null
   },
   mutations: {
     UPDATE_WINDOW_WIDTH (state) {
@@ -56,11 +50,9 @@ export default createStore({
       return axios
         .post('//' + backendHost + ':3000/sso-auth', credentials)
         .then(({ data }) => {
+          data.expireTimestamp = Date.now() + parseInt(process.env.VUE_APP_SESSION_DURATION || '100000000000000')
           commit('SET_USER', data)
         })
-    },
-    logout ({ commit }) {
-      commit('CLR_USER')
     }
   },
   modules: {

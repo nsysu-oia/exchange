@@ -31,7 +31,7 @@
     - title: 所有資料上傳後，國際處將進行獎助撥款。
   general:
     applies:
-        title: 登記出國/返國日期(隨時可更改)
+      - title: 登記出國/返國日期(隨時可更改)
         done: false
     downloads:
       - title: 役男出境申請表

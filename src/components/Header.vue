@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <img :src="logo" alt="OIA logo" class="logo" :style="{ 'width': logoWidth }" @click="pushHome">
-    <button v-if="user" type="button" class="button" @click="logout" :style="{ 'font-size': buttonFontSize }">登出</button>
+    <button type="button" class="button" @click="logout" :style="{ 'font-size': buttonFontSize }">登出</button>
   </div>
 </template>
 
@@ -9,9 +9,6 @@
 export default {
   name: 'Header',
   computed: {
-    user () {
-      return this.$store.state.user
-    },
     logo () {
       switch (this.$store.state.windowSize) {
         case 'xs':
@@ -45,7 +42,7 @@ export default {
       this.$router.push({ name: 'Home' })
     },
     logout () {
-      this.$store.dispatch('logout')
+      this.$store.commit('CLR_USER')
     }
   }
 }

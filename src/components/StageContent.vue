@@ -22,6 +22,7 @@
           upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
         )
       }"
+      @click="openUploadWindow(upload)"
     ><span>{{ upload.title }}</span></li>
   </ul>
   <ul v-if="content.downloads">
@@ -31,16 +32,29 @@
       :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
     ><span>{{ download.title }}</span></li>
   </ul>
+
+  <div v-if="uploadWindow" class='overlay' @click="uploadWindow = !uploadWindow"></div>
+  <Upload v-if="uploadWindow" :upload="uploadItem" />
 </template>
 
 <script>
 import router from '@/router'
+import Upload from '@/components/Upload.vue'
 export default {
   name: 'StageContent',
   props: {
     content: {
       type: Object,
       required: true
+    }
+  },
+  components: {
+    Upload
+  },
+  data () {
+    return {
+      uploadWindow: false,
+      uploadItem: null
     }
   },
   methods: {
@@ -63,6 +77,10 @@ export default {
         return
       }
       router.push({ name })
+    },
+    openUploadWindow (item) {
+      this.uploadItem = item
+      this.uploadWindow = !this.uploadWindow
     }
   }
 }
@@ -86,5 +104,16 @@ li {
 }
 li:hover {
   background-color: #d6d6d6;
+}
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(255,255,255,0);
+  z-index: 1;
+
+  backdrop-filter: blur(5px);
 }
 </style>

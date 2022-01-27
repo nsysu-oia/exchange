@@ -36,7 +36,7 @@ export default {
       error => {
         if (error.response.status === 401) {
           this.$router.push({ name: 'Login' })
-          this.$store.dispatch('logout')
+          this.$store.commit('CLR_USER')
         }
         return Promise.reject(error)
       }
