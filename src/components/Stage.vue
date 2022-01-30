@@ -17,16 +17,17 @@
     </ul>
   </div>
 
-  <div :style="sectionStyle(3, stage.style)">
-    <StageContent v-if="stage.general" :content="stage.general" />
-  </div>
-
-  <div :style="sectionStyle(4, stage.style)">
-    <div v-if="!mobileDevice || stage.forScholarship" class="section-title" :style="stage.style">獎助生專區</div>
-    <StageContent v-if="stage.forScholarship" :content="stage.forScholarship" />
-    <ul v-else></ul>
-    <!-- we will need this ul on the mobile devices even if no forScholarship.
-         So we can present the bottom border-radius --->
+  <div
+    v-for="(content, index) in [
+      { id: 'applies',   title: '申請或登錄' },
+      { id: 'uploads',   title: '上傳檔案區' },
+      { id: 'downloads', title: '下載檔案區' }
+    ]"
+    :key="index"
+    :style="sectionStyle(index + 3, stage.style)"
+  >
+  <div v-if="!mobileDevice || stage[content.id]" class="section-title" :style="stage.style">{{ content.title }}</div>
+    <StageContent v-if="stage[content.id]" :items="stage[content.id]" :type="content.id" />
   </div>
 </template>
 
@@ -35,7 +36,7 @@ import StageContent from '@/components/StageContent.vue'
 export default {
   name: 'Stage',
   props: {
-    stage: {
+    stageOriginal: {
       type: Object,
       required: true
     }
@@ -59,6 +60,19 @@ export default {
         default:
           return false
       }
+    },
+    stage () {
+      const stage = this.stageOriginal
+      if (this.$store.state.user.scholarship !== '無' && stage.forScholarship) {
+        ['applies', 'uploads', 'downloads'].forEach(id => {
+          if (stage.forScholarship[id]) {
+            stage[id] = (stage[id])
+              ? stage[id].concat(stage.forScholarship[id])
+              : stage.forScholarship[id]
+          }
+        })
+      }
+      return stage
     }
   },
   methods: {
@@ -76,7 +90,7 @@ export default {
       if (index === 3) {
         style.paddingTop = '10px'
       }
-      if (index === 4) {
+      if (index === 5) {
         style.borderRadius = '0 0 10px 10px'
         style.borderBottom = '3px solid ' + stageStyle.backgroundColor
         style.paddingBottom = '10px'

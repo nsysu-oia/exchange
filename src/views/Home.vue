@@ -10,7 +10,7 @@
     <Stage
       v-for="(stage, index) in stages"
       :key="index"
-      :stage="stage"
+      :stageOriginal="stage"
     />
   </div>
 </template>

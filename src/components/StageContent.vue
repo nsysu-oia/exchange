@@ -1,36 +1,11 @@
 <template>
-  <ul v-if="content.applies">
+  <ul>
     <li
-      v-for="(apply, index) in content.applies"
+      v-for="(item, index) in items"
       :key="index"
-      :style="{ listStyle:
-        svgBullet(
-          apply.done ? '已填寫' : '填寫',
-          apply.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
-        )
-      }"
-      @click="routerPush(apply.route)"
-    ><span>{{ apply.title }}</span></li>
-  </ul>
-  <ul v-if="content.uploads">
-    <li
-      v-for="(upload, index) in content.uploads"
-      :key="index"
-      :style="{ listStyle:
-        svgBullet(
-          upload.done ? '已上傳' : '上傳',
-          upload.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
-        )
-      }"
-      @click="openUploadWindow(upload)"
-    ><span>{{ upload.title }}</span></li>
-  </ul>
-  <ul v-if="content.downloads">
-    <li
-      v-for="(download, index) in content.downloads"
-      :key="index"
-      :style="{ listStyle: svgBullet('下載', 'rgb(52,199,89)') }"
-    ><span>{{ download.title }}</span></li>
+      :style="itemStyle(item)"
+      @click="itemCallback(item)"
+    ><span>{{ item.title }}</span></li>
   </ul>
 
   <div v-if="uploadWindow" class='overlay' @click="uploadWindow = !uploadWindow"></div>
@@ -43,8 +18,12 @@ import Upload from '@/components/Upload.vue'
 export default {
   name: 'StageContent',
   props: {
-    content: {
-      type: Object,
+    items: {
+      type: Array,
+      required: true
+    },
+    type: {
+      type: String,
       required: true
     }
   },
@@ -58,19 +37,76 @@ export default {
     }
   },
   methods: {
-    svgBullet (text, color) {
+    svgBullet (text, color, invert) {
       const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="54" height="26">
-          <rect x="2" y="2" width="50" height="22" rx="11" ry="11" style="fill:white;stroke:${color};stroke-width:2;" />
+          <rect x="2" y="2" width="50" height="22" rx="11" ry="11"
+                style="fill:${invert ? color : 'white'};stroke:${color};stroke-width:2;" />
           <text
             x="${24 - 5 * text.length}" y="17"
             font-size="12"
             font-family="Avenir, Helvetica, Arial, sans-serif"
-            fill="${color}"
+            fill="${invert ? 'white' : color}"
           >${text}</text>
         </svg>
       `
       return `url('data:image/svg+xml;utf8,${encodeURIComponent(svg)}')`
+    },
+    itemStyle (item) {
+      switch (this.type) {
+        case 'applies':
+          return {
+            '--list-style': this.svgBullet(
+              item.done ? '已填寫' : '填寫',
+              item.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+            ),
+            '--list-style-hover': this.svgBullet(
+              item.done ? '已填寫' : '填寫',
+              item.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)',
+              true
+            )
+          }
+        case 'uploads':
+          return {
+            '--list-style': this.svgBullet(
+              item.done ? '已上傳' : '上傳',
+              item.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)'
+            ),
+            '--list-style-hover': this.svgBullet(
+              item.done ? '已上傳' : '上傳',
+              item.done ? 'rgb(52,199,89)' : 'rgb(0,122,255)',
+              true
+            )
+          }
+        case 'downloads':
+          return {
+            '--list-style': this.svgBullet(
+              '下載',
+              'rgb(52,199,89)'
+            ),
+            '--list-style-hover': this.svgBullet(
+              '下載',
+              'rgb(52,199,89)',
+              true
+            )
+          }
+        default:
+          break
+      }
+    },
+    itemCallback (item) {
+      switch (this.type) {
+        case 'applies':
+          this.routerPush(item.route)
+          break
+        case 'uploads':
+          this.openUploadWindow(item)
+          break
+        case 'downloads':
+          break
+        default:
+          break
+      }
     },
     routerPush (name) {
       if (!name) {
@@ -99,11 +135,13 @@ li {
   padding: 5px;
   border-radius: 5px;
   margin: 0 10px 0 30px;
-  transition: background-color .3s;
+  list-style: var(--list-style);
+  transition: all .3s;
   cursor: pointer;
 }
 li:hover {
   background-color: #d6d6d6;
+  list-style: var(--list-style-hover);
 }
 .overlay {
   position: fixed;
