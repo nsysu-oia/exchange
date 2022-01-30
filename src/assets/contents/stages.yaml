@@ -10,6 +10,7 @@
       done: false
 - title: 校外提名申請階段
   style:
+    color: '#2c3e50'
     backgroundColor: '#98c1d9'
   notes:
     - title: 國際處將錄取名單提名至姊妹校。
@@ -23,6 +24,7 @@
     - title: 棄權聲明書(期限外)
 - title: 出國前一個月
   style:
+    color: '#2c3e50'
     backgroundColor: '#aaabd3'
   notes:
     - title: 出國前請完成出境申請，如是役男身分或有抵免學分需求務必提前申請。
@@ -51,6 +53,7 @@
         done: false
 - title: 出國期間
   style:
+    color: '#2c3e50'
     backgroundColor: '#eebfcd'
   notes:
     - title: 出國期間定期安全回報，並與家人保持聯繫。
@@ -70,6 +73,7 @@
         done: false
 - title: 返國後兩個月
   style:
+    color: '#2c3e50'
     backgroundColor: '#ecb8a5'
   notes:
     - title: 回國後仍須完成返校手續、返國報告書及各項文件上傳。

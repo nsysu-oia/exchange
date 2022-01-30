@@ -27,7 +27,7 @@
     :style="sectionStyle(index + 3, stage.style)"
   >
   <div v-if="!mobileDevice || stage[content.id]" class="section-title" :style="stage.style">{{ content.title }}</div>
-    <StageContent v-if="stage[content.id]" :items="stage[content.id]" :type="content.id" />
+    <StageContent v-if="stage[content.id]" :items="stage[content.id]" :type="content.id" :accentStyle="stage.style" />
   </div>
 </template>
 

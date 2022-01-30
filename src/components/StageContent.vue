@@ -9,7 +9,7 @@
   </ul>
 
   <div v-if="uploadWindow" class='overlay' @click="uploadWindow = !uploadWindow"></div>
-  <Upload v-if="uploadWindow" :upload="uploadItem" />
+  <Upload v-if="uploadWindow" :upload="uploadItem" :accentStyle="accentStyle" />
 </template>
 
 <script>
@@ -24,6 +24,10 @@ export default {
     },
     type: {
       type: String,
+      required: true
+    },
+    accentStyle: {
+      type: Object,
       required: true
     }
   },
