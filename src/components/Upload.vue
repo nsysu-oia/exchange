@@ -1,11 +1,18 @@
 <template>
   <div id='window'>
     <h1>上傳{{ upload.title }}</h1>
-    <input id="file" type="file" multiple>
+    <input id="file" type="file" :multiple="!!upload.multiple" @change="filesSelected">
     <div id="dropbox" class="dropbox" :style="{ '--color': accentStyle.color, '--background-color': accentStyle.backgroundColor }">
+      <template v-if="files">
+      <ul>
+        <li v-for="(file, index) in files" :key="index">{{ file.name }}</li>
+      </ul>
+      </template>
+      <template v-else>
       <svg id="icon" class="icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43" :style="{ '--color': accentStyle.color }">
         <path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z" />
       </svg>
+      </template>
       <label for="file" :style="{ '--color': accentStyle.color }">
         選取檔案<span>或<span id="drag-label">拖曳至此</span></span>
       </label>
@@ -38,19 +45,36 @@ export default {
       dropbox.addEventListener(event, () => {
         dropbox.classList.add('is-dragover')
         document.getElementById('drag-label').classList.add('drag-label-active')
-        document.getElementById('icon').classList.add('icon-active')
+        if (!this.files) document.getElementById('icon').classList.add('icon-active')
       })
     })
     'dragleave dragend drop'.split(' ').forEach(event => {
       dropbox.addEventListener(event, () => {
         dropbox.classList.remove('is-dragover')
         document.getElementById('drag-label').classList.remove('drag-label-active')
-        document.getElementById('icon').classList.remove('icon-active')
+        if (!this.files) document.getElementById('icon').classList.remove('icon-active')
       })
     })
     dropbox.addEventListener('drop', e => {
-      // const droppedFiles = e.originalEvent.dataTransfer.files
+      if (this.upload.multiple) {
+        this.files = e.dataTransfer.files
+      } else {
+        const container = new DataTransfer()
+        container.items.add(e.dataTransfer.files[0])
+        this.files = container.files
+      }
+      console.log(this.files)
     })
+  },
+  data () {
+    return {
+      files: null
+    }
+  },
+  methods: {
+    filesSelected (e) {
+      this.files = e.target.files
+    }
   }
 }
 </script>

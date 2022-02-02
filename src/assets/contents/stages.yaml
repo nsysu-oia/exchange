@@ -94,6 +94,7 @@
     - title: 交換生活照片
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/15-交換生活照片
       done: false
+      multiple: true
   downloads:
     - title: 抵免申請單
     - title: 返校手續單
