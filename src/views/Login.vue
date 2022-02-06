@@ -15,7 +15,11 @@
           autofocus
           @keyup.enter="sidAuth"
         />
-        <button v-if="!sidVerified" :disabled="!studentID" @click="sidAuth" />
+        <button v-if="!sidVerified" :disabled="!studentID" @click="sidAuth">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" version="1.1" viewBox="-10 0 532 512">
+             <path fill="currentColor" d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z" />
+          </svg>
+        </button>
       </div>
       <transition @before-enter="collapse" @leave="collapseRev" :css="false">
         <div class="form" v-show="sidVerified">
@@ -31,7 +35,11 @@
             class="pw-input"
             @keyup.enter="ssoAuth"
           />
-          <button :disabled="!password" @click="ssoAuth" />
+          <button :disabled="!password" @click="ssoAuth">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" version="1.1" viewBox="-10 0 532 512">
+               <path fill="currentColor" d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z" />
+            </svg>
+          </button>
         </div>
       </transition>
       <p>&nbsp;{{ errMsg }}&nbsp;</p>
@@ -207,22 +215,13 @@ input:focus {
   box-shadow: 0 0 0 1px #0070c9;
   z-index: 2;
 }
-@font-face {
-  font-family: shared-icons;
-  src: url('~@/assets/fonts/shared-icons.woff');
-}
 button {
   position: absolute;
-  top: 7px;
-  right: 10px;
-  z-index: 999;
-  font-size: 23px;
+  top: 7.5px;
+  right: 6px;
+  z-index: 3;
   cursor: pointer;
   background: none;
   border: none;
-  font-family: shared-icons;
-}
-button::before {
-  content: '\f127';
 }
 </style>
