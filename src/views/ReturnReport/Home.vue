@@ -276,10 +276,10 @@ export default {
         formData.append(
           'path',
           this.stages[4].applies[0].path + '/' +
-          this.questions.基本資料.semester.value.substring(0, 5) + '/' +
-          this.questions.基本資料.countryChi.value + '_' +
-          this.questions.基本資料.universityChi.value + '_' +
-          this.questions.基本資料.nameChi.value
+          this.$store.state.user.semester.substring(0, 5) + '/' +
+          this.$store.state.user.countryChi + '_' +
+          this.$store.state.user.universityChi + '_' +
+          this.$store.state.user.nameChi
         )
         formData.append('filename', filename)
         formData.append('file', file)

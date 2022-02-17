@@ -9,12 +9,12 @@ module.exports = {
 
     config
       .module
-        .rule('yaml')
-        .test(/\.ya?ml$/)
-        .type('json')
-        .use('yaml-loader')
-          .loader('yaml-loader')
-          .end()
+      .rule('yaml')
+      .test(/\.ya?ml$/)
+      .type('json')
+      .use('yaml-loader')
+      .loader('yaml-loader')
+      .end()
   },
   publicPath: process.env.NODE_ENV === 'production'
     ? '/exchange/'

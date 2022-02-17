@@ -9,7 +9,9 @@
   </ul>
 
   <div v-if="uploadWindow" class='overlay' @click="uploadWindow = !uploadWindow"></div>
-  <Upload v-if="uploadWindow" :upload="uploadItem" :accentStyle="accentStyle" />
+  <transition>
+  <Upload v-if="uploadWindow" :item="uploadItem" :accentStyle="accentStyle" />
+  </transition>
 </template>
 
 <script>
@@ -155,7 +157,14 @@ li:hover {
   top: 0;
   background: rgba(255,255,255,0);
   z-index: 1;
-
   backdrop-filter: blur(5px);
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
