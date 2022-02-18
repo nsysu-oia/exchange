@@ -17,8 +17,6 @@
         id="icon"
         class="icon"
         xmlns="http://www.w3.org/2000/svg"
-        width="50"
-        height="43"
         viewBox="0 0 50 43"
         :style="{ '--color': accentStyle.color }"
         @mouseover="mouseover"
@@ -221,7 +219,6 @@ export default {
   outline-offset: 0;
 }
 .icon {
-  width: 100%;
   height: 80px;
   position: fixed;
   transition: all .3s;
@@ -229,7 +226,7 @@ export default {
   left: 50%;
   cursor: pointer;
   margin-top: -40px; /* Negative half of height. */
-  margin-left: -50%; /* Negative half of width. */
+  margin-left: -50px; /* Negative half of width. */
 }
 .icon-active {
   transform: scale(1.1);
