@@ -196,11 +196,11 @@ export default {
   display: none;
 }
 .dropbox {
+  position: absolute;
   width: calc(100% - 40px);
   height: 70%;
   padding: 60px 0;
   box-sizing: border-box;
-  position: fixed;
   left: 20px;
   bottom: 20px;
   background: var(--background-color);
@@ -220,23 +220,22 @@ export default {
 }
 .icon {
   height: 80px;
-  position: fixed;
+  position: absolute;
   transition: all .3s;
-  top: 50%;
+  top: 25%;
   left: 50%;
   cursor: pointer;
-  margin-top: -40px; /* Negative half of height. */
   margin-left: -50px; /* Negative half of width. */
 }
 .icon-active {
   transform: scale(1.1);
 }
 label {
+  position: absolute;
   font-size: 20px;
   cursor: pointer;
   letter-spacing: 1px;
   transition: all .3s;
-  position: fixed;
   margin: 0 calc(50% - 100px);
   left: 0;
   right: 0;
