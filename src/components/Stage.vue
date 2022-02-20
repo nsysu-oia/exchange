@@ -36,7 +36,7 @@ import StageContent from '@/components/StageContent.vue'
 export default {
   name: 'Stage',
   props: {
-    stageOriginal: {
+    stage: {
       type: Object,
       required: true
     }
@@ -60,19 +60,6 @@ export default {
         default:
           return false
       }
-    },
-    stage () {
-      const stage = this.stageOriginal
-      if (this.$store.state.user.scholarship !== '無' && stage.forScholarship) {
-        ['applies', 'uploads', 'downloads'].forEach(id => {
-          if (stage.forScholarship[id]) {
-            stage[id] = (stage[id])
-              ? stage[id].concat(stage.forScholarship[id])
-              : stage.forScholarship[id]
-          }
-        })
-      }
-      return stage
     }
   },
   methods: {

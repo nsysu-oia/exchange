@@ -18,6 +18,7 @@
   uploads:
     - title: 入學許可上傳
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/01-入學許可
+      extension: pdf
       done: false
   downloads:
     - title: 家長同意書擔保書及研修獎助切結書
@@ -41,15 +42,19 @@
     uploads:
       - title: 簽證
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/04-簽證
+        extension: pdf
         done: false
       - title: 護照
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/05-護照
+        extension: pdf
         done: false
       - title: 存摺封面
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/06-存摺封面
+        extension: pdf
         done: false
       - title: 電子機票(隨時可更改)
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/07-電子機票
+        extension: pdf
         done: false
 - title: 出國期間
   style:
@@ -70,6 +75,7 @@
     uploads:
       - title: 出國登機證(兩週內)
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/11-出國登機證
+        extension: pdf
         done: false
 - title: 返國後兩個月
   style:
@@ -81,18 +87,22 @@
     - title: 返國報告書
       route: ReturnReport
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/12-返國報告書
+      extension: folder
       done: false
     - title: 交換證明書申請表(有需要者可填寫)
       done: false
   uploads:
     - title: 交換成績單(每學期應至少通過兩門課程)
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/14-交換成績單
+      extension: pdf
       done: false
     - title: 交換成績單(非正式)
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/14-交換成績單
+      extension: pdf
       done: false
     - title: 交換生活照片
       path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/15-交換生活照片
+      extension: folder
       done: false
       multiple: true
   downloads:
@@ -102,5 +112,6 @@
     uploads:
       - title: 返國登機證(兩週內)
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/13-返國登機證
+        extension: pdf
         done: false
 ...

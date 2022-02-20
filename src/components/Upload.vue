@@ -283,10 +283,10 @@ li span {
 }
 .upload {
   cursor: pointer;
-  position: fixed;
+  position: absolute;
   width: 40px;
   left: calc(50% - 20px); /* half of the width */
-  bottom: 10%;
+  bottom: 8%;
   transition: all .3s;
 }
 .upload:hover {
