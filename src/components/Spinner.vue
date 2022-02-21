@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <transition>
-    <span v-if="state === 'spinner'">
+    <span v-if="state === 'spinner'" :style="{ '--color': color }">
       <div class="bar1"></div>
       <div class="bar2"></div>
       <div class="bar3"></div>
@@ -17,7 +17,7 @@
     </span>
     </transition>
     <transition>
-    <div class="checkmark" v-if="state === 'done'"></div>
+    <div class="checkmark" v-if="state === 'done'" :style="{ '--color': color }"></div>
     </transition>
   </div>
 </template>

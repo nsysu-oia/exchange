@@ -93,11 +93,21 @@ export default {
   name: 'Home',
   data () {
     return {
-      questions: require('@/assets/contents/return-report.yaml'),
-      stages: require('@/assets/contents/stages.yaml')
+      questions: null,
+      stages: null
     }
   },
   created () {
+    // clear require cache
+    delete require.cache[
+      Object.keys(require.cache).find(v => /assets\/contents\/return-report.yaml/.test(v))
+    ]
+    delete require.cache[
+      Object.keys(require.cache).find(v => /assets\/contents\/stages.yaml/.test(v))
+    ]
+    this.questions = require('@/assets/contents/return-report.yaml')
+    this.stages = require('@/assets/contents/stages.yaml')
+
     axios
       .get('//' + backendHost + ':3000/return-report')
       .then(({ data }) => {

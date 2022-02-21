@@ -13,25 +13,41 @@
       :stage="stage"
     />
   </div>
+  <transition>
+    <div class="overlay" v-if="!fetched">
+      <div class="zoom">
+        <Spinner :color="'#555'" :state="'spinner'" />
+      </div>
+    </div>
+  </transition>
 </template>
 
 <script>
 // @ is an alias to /src
 import Stage from '@/components/Stage.vue'
+import Spinner from '@/components/Spinner.vue'
 import axios from 'axios'
 const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
 
 export default {
   name: 'Home',
   components: {
-    Stage
+    Stage,
+    Spinner
   },
   data () {
     return {
-      stages: require('@/assets/contents/stages.yaml')
+      stages: null,
+      fetched: true
     }
   },
   created () {
+    // clear the require cache
+    delete require.cache[
+      Object.keys(require.cache).find(v => /assets\/contents\/stages.yaml/.test(v))
+    ]
+    this.stages = require('@/assets/contents/stages.yaml')
+
     // merge the scholarship items
     for (let i = 0; i < this.stages.length; i++) {
       if (this.$store.state.user.scholarship !== '無' && this.stages[i].forScholarship) {
@@ -70,7 +86,6 @@ export default {
     axios
       .post('//' + backendHost + ':3000/syno/getinfo', { paths })
       .then(res => {
-        console.log(res.data)
         // update the completed item
         this.stages.forEach(stage => {
           ['applies', 'uploads'].forEach(id => {
@@ -83,7 +98,11 @@ export default {
             }
           })
         })
+        this.fetched = true
       })
+  },
+  mounted () {
+    this.fetched = false
   },
   computed: {
     mobileDevice () {
@@ -105,5 +124,30 @@ export default {
   display: grid;
   grid-column-gap: 1em;
   padding: 0 1em 1em 1em;
+}
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(255,255,255,0);
+  z-index: 1;
+  backdrop-filter: blur(40px);
+}
+.zoom {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: scale(1.5);
+}
+.v-enter-active,
+.v-leave-active {
+  transition: all 1s ease;
+}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+  transform: scale(1.5) translate(-5px, -5px);
 }
 </style>

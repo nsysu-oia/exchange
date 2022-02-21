@@ -72,12 +72,22 @@ export default {
   data () {
     return {
       files: null,
-      fileStates: []
+      fileStates: [],
+      nItemsUploading: 0
     }
   },
   watch: {
     files (newFiles) {
       this.fileStates = Array(newFiles.length).fill('none')
+    },
+    nItemsUploading (newNItemsUploading, oldNItemsUploading) {
+      if (oldNItemsUploading === 0) {
+        this.$emit('uploading')
+      } else {
+        if (newNItemsUploading === 0) {
+          this.$emit('uploaded')
+        }
+      }
     }
   },
   mounted () {
@@ -135,6 +145,7 @@ export default {
           this.$store.state.user.countryChi + '_' +
           this.$store.state.user.universityChi + '_' +
           this.$store.state.user.nameChi
+        this.nItemsUploading = this.files.length
         for (let i = 0; i < this.files.length; i++) {
           const formData = new FormData()
           formData.append('path', path)
@@ -145,9 +156,10 @@ export default {
             .post('//' + backendHost + ':3000/syno/upload', formData)
             .then(() => {
               this.fileStates[i] = 'done'
+              this.nItemsUploading -= 1
             })
             .catch(e => {
-              console.log(e)
+              // console.log(e)
             })
         }
       } else {
@@ -166,13 +178,15 @@ export default {
         )
         formData.append('file', this.files[0])
 
+        this.nItemsUploading = 1
         axios
           .post('//' + backendHost + ':3000/syno/upload', formData)
           .then(() => {
             this.fileStates[0] = 'done'
+            this.nItemsUploading -= 1
           })
           .catch(e => {
-            console.log(e)
+            // console.log(e)
           })
       }
     }

@@ -74,5 +74,7 @@ img.logo:hover {
   display: flex;
   justify-content: space-between;
   padding: 0 0.5rem;
+  position: relative;
+  z-index: 999;
 }
 </style>

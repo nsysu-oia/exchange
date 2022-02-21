@@ -8,9 +8,19 @@
     ><span>{{ item.title }}</span></li>
   </ul>
 
-  <div v-if="uploadWindow" class='overlay' @click="uploadWindow = !uploadWindow"></div>
+  <div
+    v-if="uploadWindow"
+    class='overlay'
+    @click="closeUploadWindow"
+  ></div>
   <transition>
-  <Upload v-if="uploadWindow" :item="uploadItem" :accentStyle="accentStyle" />
+  <Upload
+    v-if="uploadWindow"
+    :item="uploadItem"
+    :accentStyle="accentStyle"
+    @uploading="uploadWindowLock = true"
+    @uploaded="uploadWindowLock = false"
+  />
   </transition>
 </template>
 
@@ -39,7 +49,8 @@ export default {
   data () {
     return {
       uploadWindow: false,
-      uploadItem: null
+      uploadItem: null,
+      uploadWindowLock: false
     }
   },
   methods: {
@@ -122,7 +133,14 @@ export default {
     },
     openUploadWindow (item) {
       this.uploadItem = item
-      this.uploadWindow = !this.uploadWindow
+      this.uploadWindow = true
+    },
+    closeUploadWindow () {
+      if (this.uploadWindowLock) {
+        return
+      }
+      this.uploadWindow = false
+      this.$router.go()
     }
   }
 }
