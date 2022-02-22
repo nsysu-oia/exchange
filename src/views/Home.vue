@@ -1,17 +1,15 @@
 <template>
   <h1>
     國立中山大學<br />
-    學生出國交換獎助計畫<template v-if="$store.state.windowSize === 'xs'"><br /></template>各階段應完成項目
+    學生出國交換獎助計畫<template v-if="$store.state.windowSize === 'xs'"
+      ><br /></template
+    >各階段應完成項目
   </h1>
   <div
     class="grid-wrapper"
-    :style="(mobileDevice) ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
+    :style="mobileDevice ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
   >
-    <Stage
-      v-for="(stage, index) in stages"
-      :key="index"
-      :stage="stage"
-    />
+    <Stage v-for="(stage, index) in stages" :key="index" :stage="stage" />
   </div>
   <transition>
     <div class="overlay" v-if="!fetched">
@@ -27,7 +25,8 @@
 import Stage from '@/components/Stage.vue'
 import Spinner from '@/components/Spinner.vue'
 import axios from 'axios'
-const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
+import stages from '@/assets/contents/stages.json'
 
 export default {
   name: 'Home',
@@ -35,25 +34,24 @@ export default {
     Stage,
     Spinner
   },
-  data () {
+  data() {
     return {
       stages: null,
       fetched: true
     }
   },
-  created () {
-    // clear the require cache
-    delete require.cache[
-      Object.keys(require.cache).find(v => /assets\/contents\/stages.yaml/.test(v))
-    ]
-    this.stages = require('@/assets/contents/stages.yaml')
+  created() {
+    this.stages = JSON.parse(JSON.stringify(stages)) // make a deep clone to avoid cache
 
     // merge the scholarship items
     for (let i = 0; i < this.stages.length; i++) {
-      if (this.$store.state.user.scholarship !== '無' && this.stages[i].forScholarship) {
-        ['applies', 'uploads', 'downloads'].forEach(id => {
+      if (
+        this.$store.state.user.scholarship !== '無' &&
+        this.stages[i].forScholarship
+      ) {
+        ;['applies', 'uploads', 'downloads'].forEach(id => {
           if (this.stages[i].forScholarship[id]) {
-            this.stages[i][id] = (this.stages[i][id])
+            this.stages[i][id] = this.stages[i][id]
               ? this.stages[i][id].concat(this.stages[i].forScholarship[id])
               : this.stages[i].forScholarship[id]
           }
@@ -63,18 +61,24 @@ export default {
 
     // collect the uploaded documents' paths
     const paths = []
-    const userPath = '/' +
-      this.$store.state.user.semester.substring(0, 5) + '/' +
-      this.$store.state.user.countryChi + '_' +
-      this.$store.state.user.universityChi + '_' +
+    const userPath =
+      '/' +
+      this.$store.state.user.semester.substring(0, 5) +
+      '/' +
+      this.$store.state.user.countryChi +
+      '_' +
+      this.$store.state.user.universityChi +
+      '_' +
       this.$store.state.user.nameChi
     this.stages.forEach(stage => {
-      ['applies', 'uploads'].forEach(id => {
+      ;['applies', 'uploads'].forEach(id => {
         if (stage[id]) {
           stage[id].forEach(item => {
             if (item.path) {
-              paths.push(item.path + userPath +
-                ((item.extension === 'folder') ? '' : '.' + item.extension)
+              paths.push(
+                item.path +
+                  userPath +
+                  (item.extension === 'folder' ? '' : '.' + item.extension)
               )
             }
           })
@@ -88,7 +92,7 @@ export default {
       .then(res => {
         // update the completed item
         this.stages.forEach(stage => {
-          ['applies', 'uploads'].forEach(id => {
+          ;['applies', 'uploads'].forEach(id => {
             if (stage[id]) {
               stage[id].forEach(item => {
                 if (item.path) {
@@ -101,11 +105,11 @@ export default {
         this.fetched = true
       })
   },
-  mounted () {
+  mounted() {
     this.fetched = false
   },
   computed: {
-    mobileDevice () {
+    mobileDevice() {
       switch (this.$store.state.windowSize) {
         case 'xs':
         case 'sm':
@@ -131,7 +135,7 @@ export default {
   height: 100%;
   left: 0;
   top: 0;
-  background: rgba(255,255,255,0);
+  background: rgba(255, 255, 255, 0);
   z-index: 1;
   backdrop-filter: blur(40px);
 }

@@ -1,6 +1,6 @@
 <template>
-  <Header v-if="isLoginPage"/>
-  <router-view/>
+  <Header v-if="isLoginPage" />
+  <router-view />
 </template>
 
 <script>
@@ -13,13 +13,14 @@ export default {
   components: {
     Header
   },
-  setup () {
-    const isLoginPage = computed(() => { // no header for login page
+  setup() {
+    const isLoginPage = computed(() => {
+      // no header for login page
       return useRoute().name !== 'Login'
     })
     return { isLoginPage }
   },
-  created () {
+  created() {
     // RWD
     window.addEventListener('resize', () => {
       this.$store.commit('UPDATE_WINDOW_WIDTH')
@@ -42,14 +43,15 @@ export default {
       }
     )
   },
-  unmounted () {
+  unmounted() {
     window.removeEventListener()
   }
 }
 </script>
 
 <style>
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
 }

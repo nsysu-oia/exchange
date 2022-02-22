@@ -1,101 +1,108 @@
 import pdfMake from 'pdfmake/build/pdfmake'
-const backendHost = (process.env.VUE_APP_BACKEND_HOST)
-  ? 'https://' + process.env.VUE_APP_BACKEND_HOST
+import mobileLogoUrl from '@/assets/logos/logo-mobile.png'
+const backendHost = import.meta.env.VUE_APP_BACKEND_HOST
+  ? 'https://' + import.meta.env.VUE_APP_BACKEND_HOST
   : 'http://localhost:8080'
 
-function makeCover (subtitle, info) {
-  return [{
-    stack: [
-      {
-        text: '國立中山大學出國交換計畫',
-        fontSize: 30,
-        margin: [0, 100, 0, 0]
-      },
-      {
-        text: '返國報告書' + '（' + subtitle + '）',
-        fontSize: 30,
-        margin: [0, 40, 0, 0]
-      },
-      {
-        stack: [
-          info.countryChi.value + '／' + info.universityChi.value,
-          info.collegeChi.value + info.departmentChi.value,
-          info.nameChi.value + ' ' + info.studentID.value
-        ],
-        fontSize: 24,
-        margin: [0, 90, 0, 0]
-      },
-      {
-        // regex
-        // yyyy-mm-dd to yyyy年m?m月d?d日
-        text: info.fillDate.value
-          .replace(/-0/g, '-')
-          .replace(/-/, '年')
-          .replace(/-/, '月')
-          .replace(/$/, '日'),
-        fontSize: 24,
-        margin: [0, 250, 0, 0]
-      },
-      {
-        image: 'logo',
-        width: 200,
-        margin: [0, 20, 0, 0],
-        pageBreak: 'after'
-      }
-    ],
-    alignment: 'center'
-  }]
+function makeCover(subtitle, info) {
+  return [
+    {
+      stack: [
+        {
+          text: '國立中山大學出國交換計畫',
+          fontSize: 30,
+          margin: [0, 100, 0, 0]
+        },
+        {
+          text: '返國報告書' + '（' + subtitle + '）',
+          fontSize: 30,
+          margin: [0, 40, 0, 0]
+        },
+        {
+          stack: [
+            info.countryChi.value + '／' + info.universityChi.value,
+            info.collegeChi.value + info.departmentChi.value,
+            info.nameChi.value + ' ' + info.studentID.value
+          ],
+          fontSize: 24,
+          margin: [0, 90, 0, 0]
+        },
+        {
+          // regex
+          // yyyy-mm-dd to yyyy年m?m月d?d日
+          text: info.fillDate.value
+            .replace(/-0/g, '-')
+            .replace(/-/, '年')
+            .replace(/-/, '月')
+            .replace(/$/, '日'),
+          fontSize: 24,
+          margin: [0, 250, 0, 0]
+        },
+        {
+          image: 'logo',
+          width: 200,
+          margin: [0, 20, 0, 0],
+          pageBreak: 'after'
+        }
+      ],
+      alignment: 'center'
+    }
+  ]
 }
 
-export function makeFormReport (questions) {
-  const cover = makeCover(
-    '研修資訊',
-    questions.基本資料
-  )
+export function makeFormReport(questions) {
+  const cover = makeCover('研修資訊', questions.基本資料)
 
-  const toc = [{
-    toc: {
-      id: 'sectionToc',
-      title: { text: '目錄', style: 'section' },
-      numberStyle: { fontSize: 16 }
+  const toc = [
+    {
+      toc: {
+        id: 'sectionToc',
+        title: { text: '目錄', style: 'section' },
+        numberStyle: { fontSize: 16 }
+      }
     }
-  }]
+  ]
 
   const table = []
-  Object.keys(questions).slice(0, -1).forEach(section => {
-    table.push({
-      text: section,
-      style: 'section',
-      tocItem: 'sectionToc',
-      tocStyle: { fontSize: 16 }
-      // pageBreak: 'before'
-    })
-    const rows = []
-    for (const identifier in questions[section]) {
-      const question = questions[section][identifier]
-      if (question.dependencyValue === undefined ||
-        questions[question.dependency[0]][question.dependency[1]].value === question.dependencyValue) {
-        rows.push([
-          { stack: [question.label], style: 'cell' },
-          { stack: [question.value], style: 'cell' }
-        ])
-      }
-    }
-    table.push({
-      layout: {
-        hLineColor: () => {
-          return '#E6E6E6'
-        },
-        vLineWidth: () => {
-          return 0
+  Object.keys(questions)
+    .slice(0, -1)
+    .forEach(section => {
+      table.push({
+        text: section,
+        style: 'section',
+        tocItem: 'sectionToc',
+        tocStyle: { fontSize: 16 }
+        // pageBreak: 'before'
+      })
+      const rows = []
+      for (const identifier in questions[section]) {
+        const question = questions[section][identifier]
+        if (
+          question.dependencyValue === undefined ||
+          questions[question.dependency[0]][question.dependency[1]].value ===
+            question.dependencyValue
+        ) {
+          rows.push([
+            { stack: [question.label], style: 'cell' },
+            { stack: [question.value], style: 'cell' }
+          ])
         }
-      },
-      table: {
-        widths: [200, '*'],
-        body: rows
       }
+      table.push({
+        layout: {
+          hLineColor: () => {
+            return '#E6E6E6'
+          },
+          vLineWidth: () => {
+            return 0
+          }
+        },
+        table: {
+          widths: [200, '*'],
+          body: rows
+        }
+      })
     })
-  })
 
   let content = []
   content = content.concat(cover)
@@ -110,7 +117,7 @@ export function makeFormReport (questions) {
     content: content,
     footer: function (currentPage) {
       return {
-        text: (currentPage === 1) ? '' : currentPage.toString(),
+        text: currentPage === 1 ? '' : currentPage.toString(),
         margin: [0, 10, 30, 0],
         fontSize: 10,
         alignment: 'right'
@@ -120,7 +127,7 @@ export function makeFormReport (questions) {
       font: 'timesNewRomanAndKai'
     },
     images: {
-      logo: backendHost + require('@/assets/logos/logo-mobile.png')
+      logo: backendHost + mobileLogoUrl
     },
     styles: {
       section: {
@@ -135,27 +142,27 @@ export function makeFormReport (questions) {
 
   const fonts = {
     timesNewRomanAndKai: {
-      normal: 'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
+      normal:
+        'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
     }
   }
 
   return pdfMake.createPdf(docDefinition, null, fonts)
 }
 
-export function makeReviewReport (questions) {
-  const cover = makeCover(
-    '心得感想',
-    questions.基本資料
-  )
+export function makeReviewReport(questions) {
+  const cover = makeCover('心得感想', questions.基本資料)
 
-  const toc = [{
-    toc: {
-      id: 'sectionToc',
-      title: { text: '目錄', style: 'section' },
-      numberStyle: { fontSize: 16 }
-    },
-    pageBreak: 'after'
-  }]
+  const toc = [
+    {
+      toc: {
+        id: 'sectionToc',
+        title: { text: '目錄', style: 'section' },
+        numberStyle: { fontSize: 16 }
+      },
+      pageBreak: 'after'
+    }
+  ]
 
   const rows = []
   for (const identifier in questions.心得報告) {
@@ -169,10 +176,7 @@ export function makeReviewReport (questions) {
     if (identifier === 'reportTestimonial' || identifier === 'reportEnglish') {
       config.pageBreak = 'before'
     }
-    rows.push([
-      config,
-      { text: question.value }
-    ])
+    rows.push([config, { text: question.value }])
   }
 
   let content = []
@@ -188,7 +192,7 @@ export function makeReviewReport (questions) {
     content: content,
     footer: function (currentPage) {
       return {
-        text: (currentPage === 1) ? '' : currentPage.toString(),
+        text: currentPage === 1 ? '' : currentPage.toString(),
         margin: [0, 10, 30, 0],
         fontSize: 10,
         alignment: 'right'
@@ -198,7 +202,7 @@ export function makeReviewReport (questions) {
       font: 'timesNewRomanAndKai'
     },
     images: {
-      logo: backendHost + require('@/assets/logos/logo-mobile.png')
+      logo: backendHost + mobileLogoUrl
     },
     styles: {
       section: {
@@ -210,7 +214,8 @@ export function makeReviewReport (questions) {
 
   const fonts = {
     timesNewRomanAndKai: {
-      normal: 'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
+      normal:
+        'https://studyabroad.nsysu.edu.tw/fonts/times-new-roman-and-kai.ttf'
     }
   }
 

@@ -4,7 +4,7 @@ import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -47,7 +47,9 @@ router.beforeEach((to, _, next) => {
       return next({ name: 'Login' })
     }
     // renew timestamp
-    user.expireTimestamp = Date.now() + parseInt(process.env.VUE_APP_SESSION_DURATION || '100000000000000')
+    user.expireTimestamp =
+      Date.now() +
+      parseInt(import.meta.env.VUE_APP_SESSION_DURATION || '100000000000000')
     $store.commit('SET_USER', user)
 
     // TODO: The return report system is published first

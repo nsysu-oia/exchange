@@ -4,30 +4,40 @@
       :to="{ name: 'StageDetails', params: { stageTitle: stage.title } }"
       class="stage-title-link"
     >
-      <div class="stage-title" :style="stage.style" >{{ stage.title }}</div>
+      <div class="stage-title" :style="stage.style">{{ stage.title }}</div>
     </router-link>
   </div>
 
   <div :style="sectionStyle(2, stage.style)">
     <ul v-if="stage.notes">
-      <li
-        v-for="(note, index) in stage.notes"
-        :key="index"
-        >{{ note.title }}</li>
+      <li v-for="(note, index) in stage.notes" :key="index">
+        {{ note.title }}
+      </li>
     </ul>
   </div>
 
   <div
     v-for="(content, index) in [
-      { id: 'applies',   title: '申請或登錄' },
-      { id: 'uploads',   title: '上傳檔案區' },
+      { id: 'applies', title: '申請或登錄' },
+      { id: 'uploads', title: '上傳檔案區' },
       { id: 'downloads', title: '下載檔案區' }
     ]"
     :key="index"
     :style="sectionStyle(index + 3, stage.style)"
   >
-  <div v-if="!mobileDevice || stage[content.id]" class="section-title" :style="stage.style">{{ content.title }}</div>
-    <StageContent v-if="stage[content.id]" :items="stage[content.id]" :type="content.id" :accentStyle="stage.style" />
+    <div
+      v-if="!mobileDevice || stage[content.id]"
+      class="section-title"
+      :style="stage.style"
+    >
+      {{ content.title }}
+    </div>
+    <StageContent
+      v-if="stage[content.id]"
+      :items="stage[content.id]"
+      :type="content.id"
+      :accentStyle="stage.style"
+    />
   </div>
 </template>
 
@@ -51,7 +61,7 @@ export default {
   },
   */
   computed: {
-    mobileDevice () {
+    mobileDevice() {
       switch (this.$store.state.windowSize) {
         case 'xs':
         case 'sm':
@@ -63,7 +73,7 @@ export default {
     }
   },
   methods: {
-    sectionStyle (index, stageStyle) {
+    sectionStyle(index, stageStyle) {
       // styles tailored for each section
       var style = {}
       if (index === 1) {
@@ -107,7 +117,7 @@ li {
   font-size: 20pt;
   padding: 20px 5px;
   white-space: nowrap;
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 .stage-title:hover {
   transform: scale(1.05, 1.05);

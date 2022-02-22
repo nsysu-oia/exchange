@@ -16,8 +16,17 @@
           @keyup.enter="sidAuth"
         />
         <button v-if="!sidVerified" :disabled="!studentID" @click="sidAuth">
-          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" version="1.1" viewBox="-10 0 532 512">
-             <path fill="currentColor" d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            width="28"
+            version="1.1"
+            viewBox="-10 0 532 512"
+          >
+            <path
+              fill="currentColor"
+              d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z"
+            />
           </svg>
         </button>
       </div>
@@ -36,14 +45,23 @@
             @keyup.enter="ssoAuth"
           />
           <button :disabled="!password" @click="ssoAuth">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" version="1.1" viewBox="-10 0 532 512">
-               <path fill="currentColor" d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              width="28"
+              version="1.1"
+              viewBox="-10 0 532 512"
+            >
+              <path
+                fill="currentColor"
+                d="M256 0q106 0 181 75t75 181t-75 181t-181 75t-181 -75t-75 -181t75 -181t181 -75zM256 493q98 0 167.5 -69.5t69.5 -167.5t-69.5 -167.5t-167.5 -69.5t-167.5 69.5t-69.5 167.5t69.5 167.5t167.5 69.5zM286 217v-80l128 111v17l-128 110v-79h-158v-79h158z"
+              />
             </svg>
           </button>
         </div>
       </transition>
       <p>&nbsp;{{ errMsg }}&nbsp;</p>
-      <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo">
+      <img class="logo" src="@/assets/logos/logo-mobile.png" alt="OIA logo" />
     </div>
   </div>
 </template>
@@ -51,13 +69,13 @@
 <script>
 import axios from 'axios'
 import gsap from 'gsap'
-const backendHost = process.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
 const gray = '#d6d6d6'
 const blue = '#0070c9'
 
 export default {
   name: 'Login',
-  data () {
+  data() {
     return {
       studentID: '',
       password: '',
@@ -66,24 +84,24 @@ export default {
     }
   },
   methods: {
-    sidFocused () {
+    sidFocused() {
       if (this.sidVerified) {
         this.$refs.studentID.style['border-bottom'] = '1px solid ' + blue
         this.$refs.password.style['border-top'] = 0
       }
     },
-    sidBlurred () {
+    sidBlurred() {
       if (this.sidVerified) {
         this.$refs.studentID.style['border-bottom'] = 0
         this.$refs.password.style['border-top'] = '1px solid ' + gray
       }
     },
-    pwFocused () {
+    pwFocused() {
       if (this.sidVerified) {
         this.$refs.password.style['border-top-color'] = blue
       }
     },
-    pwBlurred () {
+    pwBlurred() {
       // the second condition has to be checked
       // because after successfully logged in,
       // this function will also be triggered
@@ -92,7 +110,7 @@ export default {
         this.$refs.password.style['border-top-color'] = gray
       }
     },
-    sidChanged () {
+    sidChanged() {
       this.errMsg = ''
       this.sidVerified = false
       this.password = ''
@@ -101,28 +119,38 @@ export default {
       this.$refs.studentID.style.removeProperty('border-bottom-left-radius')
       this.$refs.studentID.style.removeProperty('border-bottom-right-radius')
     },
-    collapse (el) {
-      gsap.fromTo(el, {
-        height: 0,
-        opacity: 0
-      }, {
-        height: '42px',
-        opacity: 1
-      })
+    collapse(el) {
+      gsap.fromTo(
+        el,
+        {
+          height: 0,
+          opacity: 0
+        },
+        {
+          height: '42px',
+          opacity: 1
+        }
+      )
     },
-    collapseRev (el, done) {
-      gsap.fromTo(el, {
-        height: '42px',
-        opacity: 1
-      }, {
-        height: 0,
-        opacity: 0,
-        onComplete: done
-      })
+    collapseRev(el, done) {
+      gsap.fromTo(
+        el,
+        {
+          height: '42px',
+          opacity: 1
+        },
+        {
+          height: 0,
+          opacity: 0,
+          onComplete: done
+        }
+      )
     },
-    sidAuth () {
+    sidAuth() {
       axios
-        .post('//' + backendHost + ':3000/sid-auth', { studentID: this.studentID })
+        .post('//' + backendHost + ':3000/sid-auth', {
+          studentID: this.studentID
+        })
         .then(() => {
           this.errMsg = ' '
           this.sidVerified = true
@@ -131,7 +159,9 @@ export default {
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
           `
-          this.$nextTick(() => { this.$refs.password.focus() })
+          this.$nextTick(() => {
+            this.$refs.password.focus()
+          })
         })
         .catch(err => {
           if (err.response && err.response.status === 400) {
@@ -140,7 +170,7 @@ export default {
           }
         })
     },
-    ssoAuth () {
+    ssoAuth() {
       this.$store
         .dispatch('ssoAuth', {
           studentID: this.studentID,
@@ -162,7 +192,7 @@ export default {
 <style scoped>
 .bg {
   /* The image used */
-  background-image: url('~@/assets/images/bg.webp');
+  background-image: url('@/assets/images/bg.webp');
 
   /* Full height */
   height: 100%;
