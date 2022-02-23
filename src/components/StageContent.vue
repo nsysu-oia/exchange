@@ -16,7 +16,7 @@
       v-if="uploadWindow"
       :item="uploadItem"
       :accentStyle="accentStyle"
-      @uploading="uploadWindowLock = true"
+      @uploading="uploadWindowLock = newUpload = true"
       @uploaded="uploadWindowLock = false"
     />
   </transition>
@@ -48,7 +48,8 @@ export default {
     return {
       uploadWindow: false,
       uploadItem: null,
-      uploadWindowLock: false
+      uploadWindowLock: false,
+      newUpload: false
     }
   },
   methods: {
@@ -133,7 +134,10 @@ export default {
         return
       }
       this.uploadWindow = false
-      this.$router.go()
+      if (this.newUpload) {
+        // reload to fetch completed items
+        this.$router.go()
+      }
     }
   }
 }
@@ -169,6 +173,7 @@ li:hover {
   background: rgba(255, 255, 255, 0);
   z-index: 1;
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 .v-enter-active,
 .v-leave-active {

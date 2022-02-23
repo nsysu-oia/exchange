@@ -138,6 +138,7 @@ export default {
   background: rgba(255, 255, 255, 0);
   z-index: 1;
   backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
 }
 .zoom {
   position: fixed;
