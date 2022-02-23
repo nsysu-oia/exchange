@@ -1,35 +1,27 @@
-# vue-project
+# Exchange Program Platform
+This is an open source project for the **Exchange Program Platform**, which is served as the only place to handle all on-line tasks and resources one would need after enrolling in the exchange program at National Sun Yat-sen University.
 
-This template should help get you started developing with Vue 3 in Vite.
+This repository only contains the front-end program written in [Vue.js](https://v3.vuejs.org) and [Vite](https://vitejs.dev). For the back-end service, please refer to this [repository](https://github.com/nsysu-oia/exchange-backend).
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+## Project setup
+```
+yarn
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 ### Compile and Minify for Production
 
 ```sh
-npm run build
+yarn build
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn lint
 ```

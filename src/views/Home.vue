@@ -26,7 +26,7 @@ import Stage from '@/components/Stage.vue'
 import Spinner from '@/components/Spinner.vue'
 import axios from 'axios'
 const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
-import stages from '@/assets/contents/stages.json'
+import stages from '@/assets/contents/stages.yaml'
 
 export default {
   name: 'Home',

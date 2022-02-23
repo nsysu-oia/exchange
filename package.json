@@ -9,15 +9,15 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "vue": "^3.2.29",
-    "vue-router": "^4.0.12",
     "axios": "^0.21.1",
     "gsap": "^3.7.1",
     "pdfmake": "^0.2.2",
-    "vuex": "^4.0.0-0",
-    "yaml-loader": "^0.6.0"
+    "vue": "^3.2.29",
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@rollup/plugin-yaml": "^3.1.0",
     "@rushstack/eslint-patch": "^1.1.0",
     "@vitejs/plugin-vue": "^2.1.0",
     "@vue/eslint-config-prettier": "^7.0.0",

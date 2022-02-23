@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import stages from '@/assets/contents/stages.json'
+import stages from '@/assets/contents/stages.yaml'
 export default {
   name: 'StageDetails',
   props: ['stageTitle'],
