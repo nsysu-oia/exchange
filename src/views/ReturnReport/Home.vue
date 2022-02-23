@@ -118,7 +118,7 @@
 import axios from 'axios'
 import gsap from 'gsap'
 import { makeFormReport, makeReviewReport } from './MakeReport'
-const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 import stages from '@/assets/contents/stages.yaml'
 import questions from '@/assets/contents/return-report.yaml'
 function resize() {

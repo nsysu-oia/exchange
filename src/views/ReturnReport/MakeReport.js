@@ -1,7 +1,7 @@
 import pdfMake from 'pdfmake/build/pdfmake'
 import mobileLogoUrl from '@/assets/logos/logo-mobile.png'
-const backendHost = import.meta.env.VUE_APP_BACKEND_HOST
-  ? 'https://' + import.meta.env.VUE_APP_BACKEND_HOST
+const backendHost = import.meta.env.VITE_BACKEND_HOST
+  ? 'https://' + import.meta.env.VITE_BACKEND_HOST
   : 'http://localhost:8080'
 
 function makeCover(subtitle, info) {

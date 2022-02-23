@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 
 const breakpointsMax = {
   xs: 600,
@@ -53,7 +53,7 @@ export default createStore({
           data.expireTimestamp =
             Date.now() +
             parseInt(
-              import.meta.env.VUE_APP_SESSION_DURATION || '100000000000000'
+              import.meta.env.VITE_SESSION_DURATION || '100000000000000'
             )
           commit('SET_USER', data)
         })

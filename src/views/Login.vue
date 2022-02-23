@@ -69,7 +69,7 @@
 <script>
 import axios from 'axios'
 import gsap from 'gsap'
-const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 const gray = '#d6d6d6'
 const blue = '#0070c9'
 

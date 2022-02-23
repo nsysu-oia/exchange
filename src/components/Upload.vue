@@ -73,7 +73,7 @@
 <script>
 import axios from 'axios'
 import Spinner from '@/components/Spinner.vue'
-const backendHost = import.meta.env.VUE_APP_BACKEND_HOST || 'localhost'
+const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 export default {
   name: 'Upload',
   props: {

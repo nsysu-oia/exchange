@@ -49,7 +49,7 @@ router.beforeEach((to, _, next) => {
     // renew timestamp
     user.expireTimestamp =
       Date.now() +
-      parseInt(import.meta.env.VUE_APP_SESSION_DURATION || '100000000000000')
+      parseInt(import.meta.env.VITE_SESSION_DURATION || '100000000000000')
     $store.commit('SET_USER', user)
 
     // TODO: The return report system is published first
