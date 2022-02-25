@@ -3,11 +3,11 @@
   style:
     color: '#f2f2f2'
     backgroundColor: '#464d77'
-  applies:
-    - title: 出國交換甄選申請入口
-      done: true
-    - title: 出國獎學金申請入口 (申請對象：自費研修、假日學校及符合教育部學海惜珠資格者)
-      done: false
+    # applies:
+    #   - title: 出國交換甄選申請入口
+    #     done: true
+    #   - title: 出國獎學金申請入口 (申請對象：自費研修、假日學校及符合教育部學海惜珠資格者)
+    #     done: false
 - title: 校外提名申請階段
   style:
     color: '#2c3e50'
@@ -36,6 +36,7 @@
   downloads:
     - title: 役男出境申請表
     - title: 出境申請表
+    - title: 學士班延長休業年限申請表
     - title: 學生出國預備選修課程表
     - title: 行前說明會簡報檔
   forScholarship:
@@ -71,6 +72,8 @@
       - title: 國外選課表
         done: false
       - title: 期中報告(出國一學年者，於第一學期結束繳交)
+        done: false
+      - title: 期中成績單(一學年者)
         done: false
     uploads:
       - title: 出國登機證(兩週內)

@@ -25,19 +25,26 @@
     :key="index"
     :style="sectionStyle(index + 3, stage.style)"
   >
-    <div
-      v-if="!mobileDevice || stage[content.id]"
-      class="section-title"
-      :style="stage.style"
-    >
-      {{ content.title }}
-    </div>
-    <StageContent
-      v-if="stage[content.id]"
-      :items="stage[content.id]"
-      :type="content.id"
-      :accentStyle="stage.style"
-    />
+    <template v-if="stage.title !== '校內甄選階段'">
+      <div
+        v-if="!mobileDevice || stage[content.id]"
+        class="section-title"
+        :style="stage.style"
+      >
+        {{ content.title }}
+      </div>
+      <StageContent
+        v-if="stage[content.id]"
+        :items="stage[content.id]"
+        :type="content.id"
+        :accentStyle="stage.style"
+      />
+    </template>
+    <template v-else-if="index === 0">
+      <div class="apply-phase-message">
+        恭喜您通過交換/雙聯校內甄選。接下來請依指示於時限內完成各階段應完成項目。
+      </div>
+    </template>
   </div>
 </template>
 
@@ -130,5 +137,9 @@ li {
   border-radius: 20px;
   padding: 5px;
   margin: 10px 25%;
+}
+.apply-phase-message {
+  padding: 0 10px;
+  font-size: 16pt;
 }
 </style>
