@@ -1,9 +1,11 @@
 <template>
   <div id="window">
     <h1>上傳{{ item.title }}</h1>
+    接受檔案格式：<b>{{ item.extension }}</b>
     <input
       id="file"
       type="file"
+      :accept="'.' + item.extension"
       :multiple="!!item.multiple"
       @change="filesSelected"
     />
@@ -51,7 +53,7 @@
       </label>
       <transition>
         <svg
-          v-if="files"
+          v-if="files && files[0].size"
           id="upload"
           class="upload"
           viewBox="0 0 212 160"
@@ -96,6 +98,20 @@ export default {
       nItemsUploading: 0
     }
   },
+  created() {
+    if (this.item.done) {
+      if (this.item.multiple) {
+
+      } else {
+        this.files = [{
+          name: this.$store.state.user.countryChi + '_' +
+          this.$store.state.user.universityChi + '_' +
+          this.$store.state.user.nameChi + '.' +
+          this.item.extension
+        }]
+      }
+    }
+  },
   watch: {
     files(newFiles) {
       this.fileStates = Array(newFiles.length).fill('none')
@@ -138,11 +154,34 @@ export default {
     })
     dropbox.addEventListener('drop', e => {
       if (this.item.multiple) {
+        for (let i = 0; i < e.dataTransfer.files.length; i++) {
+          const file = e.dataTransfer.files[i]
+          if (!
+            new RegExp('^' + (this.item.extension === 'jpeg' ? 'jpe?g' : this.item.extension) + '$', 'i')
+            .test(file.name.split('.').slice(-1)[0])
+          ) {
+            alert(`
+              無法上傳 ${file.name}！
+              此項目僅接受 ${this.item.extension} 格式。
+            `)
+            return
+          }
+        }
         this.files = e.dataTransfer.files
       } else {
-        const container = new DataTransfer()
-        container.items.add(e.dataTransfer.files[0])
-        this.files = container.files
+        if (!
+          new RegExp('^' + (this.item.extension === 'jpeg' ? 'jpe?g' : this.item.extension) + '$', 'i')
+          .test(e.dataTransfer.files[0].name.split('.').slice(-1)[0])
+        ) {
+          alert(`
+            無法上傳 ${e.dataTransfer.files[0].name}！
+            此項目僅接受 ${this.item.extension} 格式。
+          `)
+        } else {
+          const container = new DataTransfer()
+          container.items.add(e.dataTransfer.files[0])
+          this.files = container.files
+        }
       }
     })
   },
@@ -165,14 +204,10 @@ export default {
       this.fileStates.fill('spinner')
       if (this.item.multiple) {
         const path =
-          this.item.path +
-          '/' +
-          this.$store.state.user.semester.substring(0, 5) +
-          '/' +
-          this.$store.state.user.countryChi +
-          '_' +
-          this.$store.state.user.universityChi +
-          '_' +
+          this.item.path + '/' +
+          this.$store.state.user.semester.substring(0, 5) + '/' +
+          this.$store.state.user.countryChi + '_' +
+          this.$store.state.user.universityChi + '_' +
           this.$store.state.user.nameChi
         this.nItemsUploading = this.files.length
         for (let i = 0; i < this.files.length; i++) {
@@ -180,7 +215,7 @@ export default {
           formData.append('path', path)
           formData.append(
             'filename',
-            parseInt(i) + '.' + this.files[i].name.split('.').slice(-1)[0]
+            parseInt(i) + '.' + this.item.extension
           )
           formData.append('file', this.files[i])
 
@@ -202,13 +237,10 @@ export default {
         )
         formData.append(
           'filename',
-          this.$store.state.user.countryChi +
-            '_' +
-            this.$store.state.user.universityChi +
-            '_' +
-            this.$store.state.user.nameChi +
-            '.' +
-            this.files[0].name.split('.').slice(-1)[0]
+          this.$store.state.user.countryChi + '_' +
+            this.$store.state.user.universityChi + '_' +
+            this.$store.state.user.nameChi + '.' +
+            this.item.extension
         )
         formData.append('file', this.files[0])
 
@@ -229,6 +261,9 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  margin-block-end: 0.25em;
+}
 #window {
   position: fixed;
   width: 70%;
@@ -313,7 +348,8 @@ ul {
   padding: 0;
   width: 50%;
   height: 70%;
-  overflow-x: auto;
+  white-space: nowrap;
+  overflow: auto;
   border-radius: 15px;
   box-shadow: 0px 0px 10px;
 }
@@ -322,7 +358,6 @@ li {
   justify-content: flex-start;
   font-size: 18px;
   padding: 10px 0 0 20%;
-  overflow: hidden;
   gap: 5px;
 }
 li span {

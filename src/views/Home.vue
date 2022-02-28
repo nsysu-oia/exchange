@@ -78,7 +78,7 @@ export default {
               paths.push(
                 item.path +
                   userPath +
-                  (item.extension === 'folder' ? '' : '.' + item.extension)
+                  (item.multiple? '' : '.' + item.extension)
               )
             }
           })
