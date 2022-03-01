@@ -94,6 +94,7 @@
       multiple: true
       done: false
     - title: 交換證明書申請表(有需要者可填寫)
+      route: ProofOfExchange
       done: false
   uploads:
     - title: 交換成績單(每學期應至少通過兩門課程)

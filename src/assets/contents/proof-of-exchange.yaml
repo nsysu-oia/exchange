@@ -1,0 +1,134 @@
+---
+fillDate:
+  label: 時間戳記
+  value: 
+  type: date
+  readonly: true
+  required: true
+nameChi:
+  label: 姓名
+  value: 
+  type: text
+  readonly: true
+  required: true
+studentID: 
+  label: 學號
+  value: 
+  type: text
+  readonly: true
+  required: true
+yearApply: 
+  label: 甄選年度/出境類別
+  value: 
+  type: text
+  readonly: true
+  required: true
+program: 
+  label: 地區
+  value: 
+  type: text
+  readonly: true
+  required: true
+semester: 
+  label: 交換/研修期間
+  value: 
+  type: text
+  readonly: true
+  required: true
+collegeChi: 
+  label: 中文學院
+  value: 
+  type: text
+  readonly: true
+  required: true
+departmentChi: 
+  label: 中文系所
+  value: 
+  type: text
+  readonly: true
+  required: true
+collegeEng: 
+  label: 英文學院
+  value: 
+  type: text
+  readonly: true
+  required: true
+departmentEng: 
+  label: 英文系所
+  value: 
+  type: text
+  readonly: true
+  required: true
+continentChi: 
+  label: 中文州別
+  value: 
+  type: text
+  readonly: true
+  required: true
+countryChi: 
+  label: 中文國別
+  value: 
+  type: text
+  readonly: true
+  required: true
+universityChi: 
+  label: 中文交換/研修校名
+  value: 
+  type: text
+  readonly: true
+  required: true
+continentEng: 
+  label: 英文州別
+  value: 
+  type: text
+  readonly: true
+  required: true
+countryEng: 
+  label: 英文國別
+  value: 
+  type: text
+  readonly: true
+  required: true
+universityEng: 
+  label: 英文交換/研修校名
+  value: 
+  type: text
+  readonly: true
+  required: true
+degreeDuringExchange: 
+  label: 交換時學位
+  value: 
+  type: select
+  options:
+    - 學士班
+    - 碩士班
+  required: true
+birthYear: 
+  label: 出生年
+  value: 
+  type: text
+  readonly: true
+  required: true
+birthMonth:  
+  label: 出生月
+  value: 
+  type: text
+  readonly: true
+  required: true
+birthDay: 
+  label: 出生日
+  value: 
+  type: text
+  readonly: true
+  required: true
+exchangeStartDate: 
+  label: 交換開始日期（請填入學許可上的時間）
+  value: 
+  type: date
+  required: true
+exchangeEndDate: 
+  label: 交換結束日期（請填入學許可上的時間）
+  value: 
+  type: date
+  required: true
+...

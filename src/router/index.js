@@ -22,6 +22,11 @@ const router = createRouter({
       component: () => import('@/views/ReturnReport/Home.vue')
     },
     {
+      path: '/%E4%BA%A4%E6%8F%9B%E8%AD%89%E6%98%8E%E6%9B%B8', // 交換證明書
+      name: 'ProofOfExchange',
+      component: () => import('@/views/ProofOfExchange/Home.vue')
+    },
+    {
       path: '/:stageTitle',
       name: 'StageDetails',
       props: true,
