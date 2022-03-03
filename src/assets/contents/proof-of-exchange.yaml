@@ -95,6 +95,12 @@ universityEng:
   type: text
   readonly: true
   required: true
+birthDate: 
+  label: 出生年月日
+  value: 
+  type: date
+  readonly: true
+  required: true
 degreeDuringExchange: 
   label: 交換時學位
   value: 
@@ -102,24 +108,6 @@ degreeDuringExchange:
   options:
     - 學士班
     - 碩士班
-  required: true
-birthYear: 
-  label: 出生年
-  value: 
-  type: text
-  readonly: true
-  required: true
-birthMonth:  
-  label: 出生月
-  value: 
-  type: text
-  readonly: true
-  required: true
-birthDay: 
-  label: 出生日
-  value: 
-  type: text
-  readonly: true
   required: true
 exchangeStartDate: 
   label: 交換開始日期（請填入學許可上的時間）

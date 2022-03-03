@@ -1,20 +1,12 @@
 <template>
   <h1>交換證明書</h1>
   <div class="export" :style="{ width: sectionWidth }">
-    <p><b>預覽報告書並提交至國際處</b></p>
     <button
       type="button"
       class="button"
-      @click="validateAndExport('研修資訊.pdf')"
+      @click="validateAndExport"
     >
-      研修資訊
-    </button>
-    <button
-      type="button"
-      class="button"
-      @click="validateAndExport('心得感想.pdf')"
-    >
-      心得感想
+      匯出報告書
     </button>
   </div>
   <div v-if="!!questions" ref="contents">
@@ -24,11 +16,7 @@
         :key="questionIndex"
       >
         <transition @before-enter="collapse" @leave="collapseRev" :css="false">
-          <div
-            v-if="
-              checkDependency(question.dependency, question.dependencyValue)
-            "
-          >
+          <div>
             <label class="question" :for="identifier">{{
               question.label
             }}</label>
@@ -49,43 +37,6 @@
                 {{ option }}
               </option>
             </select>
-            <!-- textarea -->
-            <textarea
-              class="js-autoresize"
-              v-else-if="question.type === 'textarea'"
-              :placeholder="question.required ? '必填' : null"
-              :id="identifier"
-              v-model.lazy="question.value"
-              @change="syncDB"
-              @blur="validate"
-              @input="removeMark"
-            />
-            <!-- checkbox -->
-            <div v-else-if="question.type === 'checkbox'">
-              <div
-                v-for="(option, optionIndex) in question.options"
-                :key="optionIndex"
-              >
-                <input
-                  type="checkbox"
-                  :id="identifier + ';' + option"
-                  :value="option"
-                  v-model="question.value"
-                  @change="syncDB"
-                  style="width: initial"
-                />
-                <label :for="identifier + ';' + option">{{
-                  option
-                }}</label>
-                <input
-                  v-if="option === '其他' && question.value.includes(option)"
-                  type="text"
-                  v-model.lazy="question.otherDetail"
-                  :id="identifier + ';otherDetail'"
-                  @change="otherDetailSyncDB"
-                />
-              </div>
-            </div>
             <!-- input -->
             <input
               v-else
@@ -97,9 +48,7 @@
               @change="syncDB"
               @blur="validate"
               @input="removeMark"
-              v-on="{ keypress: question.type === 'number' ? isNumber : null }"
             />
-            <!-- v-on syntax above: https://github.com/vuejs/vue/issues/7349#issuecomment-354937350 -->
           </div>
         </transition>
       </div>
@@ -111,7 +60,7 @@
 <script>
 import axios from 'axios'
 import gsap from 'gsap'
-import { makeFormReport, makeReviewReport } from './MakeReport'
+import makeReport from './MakeReport'
 const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 import stages from '@/assets/contents/stages.yaml'
 import questions from '@/assets/contents/proof-of-exchange.yaml'
@@ -130,17 +79,17 @@ export default {
   created() {
     this.questions = JSON.parse(JSON.stringify(questions)) // make a deep clone to avoid cache
     this.stages = JSON.parse(JSON.stringify(stages)) // make a deep clone to avoid cache
-    axios.get('//' + backendHost + ':3000/return-report').then(({ data }) => {
+    axios.get('//' + backendHost + ':3000/proof-of-exchange').then(({ data }) => {
       for (const question in this.questions) {
         this.questions[question].value = data[question]
-        if (this.questions[question].type === 'checkbox') {
-          // an exception in the overal structure
-          // used by the input box after the `other` checkbox
-          //   level 1 --v  level 2 --v       v-- this is the only level 3 question
-          this.questions[question].otherDetail =
-            data[question.slice(0, -1) + 'OtherDetail']
-        }
       }
+
+      this.questions['birthDate'].value = new Date(
+        parseInt(data.birthYear) + 1911,
+        data.birthMonth - 1,
+        data.birthDay
+      ).toISOString().split('T')[0]
+
       // setup textarea auto resizing
       this.$nextTick(function () {
         const targets = this.$refs.contents.querySelectorAll('.js-autoresize')
@@ -206,61 +155,18 @@ export default {
         }
       )
     },
-    checkDependency(dependency, dependencyValue) {
-      if (dependencyValue === undefined) {
-        return true
-      }
-      // dependency and dependencyValue should both be provided in the yaml or neither
-      if (
-        this.questions[dependency[0]][dependency[1]].value === dependencyValue
-      ) {
-        return true
-      }
-      return false
-    },
-    isNumber(e) {
-      const charCode = e.which ? e.which : e.keyCode
-      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        e.preventDefault()
-      }
-    },
     syncDB(e) {
-      const ids = e.target.id.split(';')
+      const id = e.target.id
       const values = {} // values to be send to backend
-      values[ids[1]] = this.questions[ids[0]][ids[1]].value
+      values[id] = this.questions[id].value
       values.fillDate = this.today
-      this.questions.基本資料.fillDate.value = values.fillDate
+      this.questions.fillDate.value = values.fillDate
 
-      if (e.target.type === 'number' && ids[1].substring(0, 4) === 'cost') {
-        if (!e.target.value) {
-          // empty string
-          this.questions[ids[0]][ids[1]].value = values[ids[1]] = '0'
-        }
-        // an exception action for handling costTotal
-        // summing the cost
-        let costTotal = 0
-        for (const index in this.questions[ids[0]].costTotal.isSumOf) {
-          const costItem = this.questions[ids[0]].costTotal.isSumOf[index]
-          costTotal += parseInt(this.questions[ids[0]][costItem].value)
-        }
-        this.questions[ids[0]].costTotal.value = costTotal
-        values.costTotal = costTotal
-      }
-
-      axios.post('//' + backendHost + ':3000/return-report', { values })
-    },
-    otherDetailSyncDB(e) {
-      const ids = e.target.id.split(';')
-      const values = {}
-      values[ids[1].slice(0, -1) + 'OtherDetail'] =
-        this.questions[ids[0]][ids[1]].otherDetail
-      values.fillDate = this.today
-      this.questions.基本資料.fillDate.value = values.fillDate
-      axios.post('//' + backendHost + ':3000/return-report', { values })
+      axios.post('//' + backendHost + ':3000/proof-of-exchange', { values })
     },
     validate(e) {
-      const ids = e.target.id.split(';')
-      const question = this.questions[ids[0]][ids[1]]
+      const id = e.target.id
+      const question = this.questions[id]
       if (question.required) {
         if (!question.value) {
           e.target.style['border-color'] = '#e30000'
@@ -272,28 +178,16 @@ export default {
       e.target.style.removeProperty('border-color')
       e.target.style.removeProperty('background-color')
     },
-    validateAndExport(filename) {
+    validateAndExport() {
       // validate
-      for (const sectionIdx of Object.keys(this.questions).slice(
-        filename === '研修資訊.pdf' ? 0 : -1,
-        filename === '研修資訊.pdf' ? -1 : this.questions.length
-      )) {
-        for (const questionIdx in this.questions[sectionIdx]) {
-          const question = this.questions[sectionIdx][questionIdx]
-          if (
-            this.checkDependency(
-              question.dependency,
-              question.dependencyValue
-            ) &&
-            question.required &&
-            !question.value
-          ) {
-            const el = document.getElementById(sectionIdx + ';' + questionIdx)
-            el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            el.style['border-color'] = '#e30000'
-            el.style['background-color'] = '#fff2f4'
-            return
-          }
+      for (const questionIdx in this.questions) {
+        const question = this.questions[questionIdx]
+        if (question.required && !question.value) {
+          const el = document.getElementById(questionIdx)
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          el.style['border-color'] = '#e30000'
+          el.style['background-color'] = '#fff2f4'
+          return
         }
       }
 
@@ -306,43 +200,17 @@ export default {
           alert('預覽PDF失敗')
         }
       }
-      const uploadToSyno = file => {
-        const formData = new FormData()
-        formData.append(
-          'path',
-          this.stages[4].applies[0].path +
-            '/' +
-            this.$store.state.user.semester.substring(0, 5) +
-            '/' +
-            this.$store.state.user.countryChi +
-            '_' +
-            this.$store.state.user.universityChi +
-            '_' +
-            this.$store.state.user.nameChi
-        )
-        formData.append('filename', filename)
-        formData.append('file', file)
-
-        axios.post('//' + backendHost + ':3000/syno/upload', formData)
-        // .catch(e => {
-        //   console.log(e)
-        // })
-      }
 
       // make a deep copy of questions to prevent modifications
       const questions = JSON.parse(JSON.stringify(this.questions))
 
-      const report =
-        filename === '研修資訊.pdf'
-          ? makeFormReport(questions)
-          : makeReviewReport(questions)
+      const report = makeReport(questions)
 
       // immediately open new window after button click to prevent popup blocker
       const win = window.open('', '_blank')
 
       report.getBlob(blob => {
         openInNewWin(blob, win)
-        uploadToSyno(blob)
       })
     }
   }
@@ -381,7 +249,7 @@ h2 {
   background-color: #f5f5f7;
   border-radius: 15px;
   margin: 0 auto;
-  padding-bottom: 20px;
+  padding: 20px 0;
 }
 .section {
   text-align: left;
@@ -396,7 +264,6 @@ h2 {
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
-  margin: auto 10px;
   padding: 5px 20px;
   transition: transform 0.2s;
   font-family: inherit;
