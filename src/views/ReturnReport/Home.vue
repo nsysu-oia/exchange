@@ -354,6 +354,7 @@ export default {
 
       // immediately open new window after button click to prevent popup blocker
       const win = window.open('', '_blank')
+      win.focus()
 
       report.getBlob(blob => {
         openInNewWin(blob, win)

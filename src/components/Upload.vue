@@ -18,6 +18,9 @@
       }"
     >
       <transition>
+        <UploadPreview v-if="showUploadPreview" :item="item" :accentStyle="accentStyle" />
+      </transition>
+      <transition>
         <ul v-if="files">
           <li v-for="(file, index) in files" :key="index">
             <Spinner :state="fileStates[index]" :color="accentStyle.color" />
@@ -27,7 +30,7 @@
       </transition>
       <transition>
         <svg
-          v-show="!files"
+          v-show="!files && !showUploadPreview"
           id="icon"
           class="icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -75,6 +78,7 @@
 <script>
 import axios from 'axios'
 import Spinner from '@/components/Spinner.vue'
+import UploadPreview from '@/components/UploadPreview.vue'
 const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 export default {
   name: 'Upload',
@@ -89,31 +93,20 @@ export default {
     }
   },
   components: {
-    Spinner
+    Spinner,
+    UploadPreview
   },
   data() {
     return {
       files: null,
       fileStates: [],
-      nItemsUploading: 0
-    }
-  },
-  created() {
-    if (this.item.done) {
-      if (this.item.multiple) {
-
-      } else {
-        this.files = [{
-          name: this.$store.state.user.countryChi + '_' +
-          this.$store.state.user.universityChi + '_' +
-          this.$store.state.user.nameChi + '.' +
-          this.item.extension
-        }]
-      }
+      nItemsUploading: 0,
+      showUploadPreview: this.item.done
     }
   },
   watch: {
     files(newFiles) {
+      this.showUploadPreview = false
       this.fileStates = Array(newFiles.length).fill('none')
     },
     nItemsUploading(newNItemsUploading, oldNItemsUploading) {

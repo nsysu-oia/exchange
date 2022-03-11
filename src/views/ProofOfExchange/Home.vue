@@ -1,12 +1,13 @@
 <template>
   <h1>交換證明書</h1>
   <div class="export" :style="{ width: sectionWidth }">
+    <p><b>交換證明書不需提交至國際處，如有需要可自行匯出儲存</b></p>
     <button
       type="button"
       class="button"
       @click="validateAndExport"
     >
-      匯出報告書
+      匯出證明書
     </button>
   </div>
   <div v-if="!!questions" ref="contents">
@@ -208,6 +209,7 @@ export default {
 
       // immediately open new window after button click to prevent popup blocker
       const win = window.open('', '_blank')
+      win.focus()
 
       report.getBlob(blob => {
         openInNewWin(blob, win)
@@ -241,6 +243,9 @@ label.question {
 }
 h2 {
   padding-top: 15px;
+}
+p {
+  margin-top: 0px;
 }
 .export {
   color: #696969;
