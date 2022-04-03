@@ -1,5 +1,7 @@
 <template>
-  <ul>
+  <Spinner v-if="filenames.length === 0" :state="'spinner'" :color="accentStyle.color" />
+
+  <ul v-else>
     <li v-for="(filename, index) in filenames" :key="index" @click="previewInNewWindow(filename)">
       <Spinner :state="'done'" :color="accentStyle.color" />
       <span>{{ filename }}</span>
