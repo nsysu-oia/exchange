@@ -22,7 +22,11 @@
       done: false
   downloads:
     - title: 家長同意書擔保書及研修獎助切結書
-    - title: 棄權聲明書(期限外)
+  forScholarship:
+    applies:
+      - title: 獎助證明書申請表(有需要者可填寫)
+        route: ProofOfScholarship
+        done: false
 - title: 出國前一個月
   style:
     color: '#2c3e50'
@@ -114,10 +118,6 @@
     - title: 抵免申請單
     - title: 返校手續單
   forScholarship:
-    applies:
-      - title: 獎助證明書申請表(有需要者可填寫)
-        route: ProofOfScholarship
-        done: false
     uploads:
       - title: 返國登機證(兩週內)
         path: /share/03-學生交換組/03-出國研修獎助計畫單一入口/13-返國登機證

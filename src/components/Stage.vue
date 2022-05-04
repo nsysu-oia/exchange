@@ -38,6 +38,7 @@
         :items="stage[content.id]"
         :type="content.id"
         :accentStyle="stage.style"
+        :downloadLinks="downloadLinks"
       />
     </template>
     <template v-else-if="index === 0">
@@ -55,6 +56,9 @@ export default {
   props: {
     stage: {
       type: Object,
+      required: true
+    },
+    downloadLinks: {
       required: true
     }
   },

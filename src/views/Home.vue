@@ -9,7 +9,7 @@
     class="grid-wrapper"
     :style="mobileDevice ? '' : { 'grid-template-columns': 'repeat(5, 1fr)' }"
   >
-    <Stage v-for="(stage, index) in stages" :key="index" :stage="stage" />
+    <Stage v-for="(stage, index) in stages" :key="index" :stage="stage" :downloadLinks="downloadLinks" />
   </div>
   <transition>
     <div class="overlay" v-if="!fetched">
@@ -37,7 +37,8 @@ export default {
   data() {
     return {
       stages: null,
-      fetched: true
+      fetched: true,
+      downloadLinks: null
     }
   },
   created() {
@@ -103,6 +104,14 @@ export default {
           })
         })
         this.fetched = true
+      })
+
+
+    // fetch download links
+    axios
+      .get('//' + backendHost + ':3000/download-links')
+      .then(res => {
+        this.downloadLinks = res.data
       })
   },
   mounted() {

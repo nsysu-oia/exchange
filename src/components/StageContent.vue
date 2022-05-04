@@ -39,6 +39,9 @@ export default {
     accentStyle: {
       type: Object,
       required: true
+    },
+    downloadLinks: {
+      required: true
     }
   },
   components: {
@@ -114,6 +117,7 @@ export default {
           this.openUploadWindow(item)
           break
         case 'downloads':
+          window.open(this.downloadLinks[item.title], '_blank').focus()
           break
         default:
           break
