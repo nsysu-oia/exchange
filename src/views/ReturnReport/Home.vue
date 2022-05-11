@@ -3,18 +3,18 @@
   <div class="export" :style="{ width: sectionWidth }">
     <p><b>預覽報告書並提交至國際處</b></p>
     <button
+      v-for="(btn, index) in buttonInfo"
       type="button"
       class="button"
-      @click="validateAndExport('研修資訊.pdf')"
+      @click="btn.link ? openLink(btn.link) : validateAndExport(btn.fname, index)"
+      :style="{ '--background-color': btn.link ? '#007754' : '#1c4a7c' }"
     >
-      研修資訊
-    </button>
-    <button
-      type="button"
-      class="button"
-      @click="validateAndExport('心得感想.pdf')"
-    >
-      心得感想
+    <Transition mode="out-in">
+    <span :key="btn.title">{{ btn.title }}</span>
+    </Transition>
+    <Transition name="spinner">
+    <span v-if="btn.title === '製作中'" class="spinner"><Spinner :color="'#ddd'" :state="'spinner'" /></span>
+    </Transition>
     </button>
   </div>
   <div v-if="!!questions" ref="contents">
@@ -121,16 +121,32 @@ import { makeFormReport, makeReviewReport } from './MakeReport'
 const backendHost = import.meta.env.VITE_BACKEND_HOST || 'localhost'
 import stages from '@/assets/contents/stages.yaml'
 import questions from '@/assets/contents/return-report.yaml'
+import Spinner from '@/components/Spinner.vue'
 function resize() {
   this.style.height = 'auto' // shrink
   this.style.height = `${this.scrollHeight}px` // grow
 }
 export default {
   name: 'Home',
+  components: {
+    Spinner
+  },
   data() {
     return {
       questions: null,
-      stages: null
+      stages: null,
+      buttonInfo: [
+        {
+          title: '研修資訊',
+          fname: '研修資訊.pdf',
+          link: null
+        },
+        {
+          title: '心得感想',
+          fname: '心得感想.pdf',
+          link: null
+        }
+      ]
     }
   },
   created() {
@@ -287,7 +303,7 @@ export default {
       e.target.style.removeProperty('border-color')
       e.target.style.removeProperty('background-color')
     },
-    validateAndExport(filename) {
+    validateAndExport(filename, index) {
       // validate
       for (const sectionIdx of Object.keys(this.questions).slice(
         filename === '研修資訊.pdf' ? 0 : -1,
@@ -313,14 +329,11 @@ export default {
       }
 
       // validated
-      const openInNewWin = async (blob, win) => {
-        try {
-          const urlCreator = window.URL || window.webkitURL
-          win.location.href = urlCreator.createObjectURL(blob)
-        } catch (e) {
-          alert('預覽PDF失敗')
-        }
-      }
+
+      this.buttonInfo[index].title = '製作中'
+      // wait at least 2s even if the report is made
+      const delay = new Promise(resolve => setTimeout(resolve, 1500))
+
       const uploadToSyno = file => {
         const formData = new FormData()
         formData.append(
@@ -352,14 +365,16 @@ export default {
           ? makeFormReport(questions)
           : makeReviewReport(questions)
 
-      // immediately open new window after button click to prevent popup blocker
-      const win = window.open('', '_blank')
-      win.focus()
-
-      report.getBlob(blob => {
-        openInNewWin(blob, win)
+      // async getBlob
+      report.getBlob(async blob => {
+        await delay
+        this.buttonInfo[index].link = (window.URL || window.webkitURL).createObjectURL(blob)
+        this.buttonInfo[index].title = '預覽'
         uploadToSyno(blob)
       })
+    },
+    openLink (link) {
+      window.open(link, '_blank').focus()
     }
   }
 }
@@ -404,7 +419,8 @@ h2 {
   margin: 0 auto;
 }
 .button {
-  background-color: #1c4a7c; /* Green */
+  position: relative;
+  background-color: var(--background-color); /* Green */
   border: none;
   border-radius: 25px;
   color: white;
@@ -414,8 +430,36 @@ h2 {
   cursor: pointer;
   margin: auto 10px;
   padding: 5px 20px;
-  transition: transform 0.2s;
+  transition: background-color .5s ease;
   font-family: inherit;
   font-size: 17px;
+  width: 120px;
+  height: 35px;
+  overflow-x: visible;
+}
+.spinner {
+  position: absolute;
+  top: 0.4px;
+  left: 1.5px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: color 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  color: var(--background-color);
+}
+
+.spinner-enter-active,
+.spinner-leave-active {
+  transition: opacity 0.5s ease 0.5s;
+}
+
+.spinner-enter-from,
+.spinner-leave-to {
+  opacity: 0;
 }
 </style>
