@@ -6,7 +6,7 @@
       v-for="(btn, index) in buttonInfo"
       type="button"
       class="button"
-      @click="btn.link ? openLink(btn.link) : validateAndExport(btn.fname, index)"
+      @click="btn.title === '製作中' ? null : (btn.link ? openLink(btn.link) : validateAndExport(btn.fname, index))"
       :style="{ '--background-color': btn.link ? '#007754' : '#1c4a7c' }"
     >
     <Transition mode="out-in">
