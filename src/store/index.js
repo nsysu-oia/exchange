@@ -40,7 +40,7 @@ export default createStore({
       axios.defaults.headers.common.Authorization = `Bearer ${data.token}`
     },
     CLR_USER(state) {
-      localStorage.removeItem('user')
+      localStorage.clear()
       state.user = null
       location.reload()
     }

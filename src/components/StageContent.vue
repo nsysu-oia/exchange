@@ -140,6 +140,7 @@ export default {
       this.uploadWindow = false
       if (this.newUpload) {
         // reload to fetch completed items
+        localStorage.removeItem('itemDones')
         this.$router.go()
       }
     }

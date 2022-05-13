@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       stages: null,
-      fetched: true,
+      fetched: false,
       downloadLinks: null
     }
   },
@@ -60,51 +60,78 @@ export default {
       }
     }
 
-    // collect the uploaded documents' paths
-    const paths = []
-    const userPath =
-      '/' +
-      this.$store.state.user.semester.substring(0, 5) +
-      '/' +
-      this.$store.state.user.countryChi +
-      '_' +
-      this.$store.state.user.universityChi +
-      '_' +
-      this.$store.state.user.nameChi
-    this.stages.forEach(stage => {
-      ;['applies', 'uploads'].forEach(id => {
-        if (stage[id]) {
-          stage[id].forEach(item => {
-            if (item.path) {
-              paths.push(
-                item.path +
-                  userPath +
-                  (item.multiple? '' : '.' + item.extension)
-              )
-            }
-          })
-        }
-      })
-    })
-
-    // compare with syno
-    axios
-      .post('//' + backendHost + ':3000/syno/getinfo', { paths })
-      .then(res => {
-        // update the completed item
-        this.stages.forEach(stage => {
-          ;['applies', 'uploads'].forEach(id => {
-            if (stage[id]) {
-              stage[id].forEach(item => {
-                if (item.path) {
-                  item.done = !res.data.shift().code
-                }
-              })
-            }
-          })
+    const itemDonesString = localStorage.getItem('itemDones')
+    if (itemDonesString && JSON.parse(itemDonesString).expireTimestamp > Date.now()) {
+      const itemDones = JSON.parse(itemDonesString).data
+      // update the completed item
+      this.stages.forEach(stage => {
+        ['applies', 'uploads'].forEach(id => {
+          if (stage[id]) {
+            stage[id].forEach(item => {
+              if (item.path) {
+                item.done = !itemDones.shift()
+              }
+            })
+          }
         })
-        this.fetched = true
       })
+      this.fetched = true
+    } else {
+      // collect the uploaded documents' paths
+      const paths = []
+      const userPath =
+        '/' +
+        this.$store.state.user.semester.substring(0, 5) +
+        '/' +
+        this.$store.state.user.countryChi +
+        '_' +
+        this.$store.state.user.universityChi +
+        '_' +
+        this.$store.state.user.nameChi
+      this.stages.forEach(stage => {
+        ['applies', 'uploads'].forEach(id => {
+          if (stage[id]) {
+            stage[id].forEach(item => {
+              if (item.path) {
+                paths.push(
+                  item.path +
+                    userPath +
+                    (item.multiple? '' : '.' + item.extension)
+                )
+              }
+            })
+          }
+        })
+      })
+
+      // compare with syno
+      axios
+        .post('//' + backendHost + ':3000/syno/getinfo', { paths })
+        .then(res => {
+          // if the item is not uploaded, an error code will present
+          const itemDones = res.data.map(d => d.code ? 1 : 0)
+
+          // cache to localStorage
+          localStorage.setItem('itemDones', JSON.stringify({
+            data: itemDones,
+            expireTimestamp: Date.now() + 3600000 // 1 hr
+          }))
+
+          // update the completed item
+          this.stages.forEach(stage => {
+            ['applies', 'uploads'].forEach(id => {
+              if (stage[id]) {
+                stage[id].forEach(item => {
+                  if (item.path) {
+                    item.done = !itemDones.shift()
+                  }
+                })
+              }
+            })
+          })
+          this.fetched = true
+        })
+    }
 
 
     // fetch download links
@@ -113,9 +140,6 @@ export default {
       .then(res => {
         this.downloadLinks = res.data
       })
-  },
-  mounted() {
-    this.fetched = false
   },
   computed: {
     mobileDevice() {

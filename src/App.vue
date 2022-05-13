@@ -13,13 +13,6 @@ export default {
   components: {
     Header
   },
-  setup() {
-    const isLoginPage = computed(() => {
-      // no header for login page
-      return useRoute().name !== 'Login'
-    })
-    return { isLoginPage }
-  },
   created() {
     // RWD
     window.addEventListener('resize', () => {
@@ -42,6 +35,12 @@ export default {
         return Promise.reject(error)
       }
     )
+  },
+  computed: {
+    isLoginPage () {
+      // no header for login page
+      return useRoute().name !== 'Login'
+    }
   },
   unmounted() {
     window.removeEventListener()
