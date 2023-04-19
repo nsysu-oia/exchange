@@ -27,7 +27,7 @@ const router = createRouter({
       component: () => import('@/views/ProofOfExchange/Home.vue')
     },
     {
-      path: '/%E7%8D%8E%E5%8A%A9%E8%AD%89%E6%98%8E%E6%9B%B8', // 交換證明書
+      path: '/%E7%8D%8E%E5%8A%A9%E8%AD%89%E6%98%8E%E6%9B%B8', // 獎助證明書
       name: 'ProofOfScholarship',
       component: () => import('@/views/ProofOfScholarship/Home.vue')
     },
